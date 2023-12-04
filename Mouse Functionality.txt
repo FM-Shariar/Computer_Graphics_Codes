@@ -1,0 +1,144 @@
+Code-
+#include <iostream>
+#include <GL/glut.h>
+using namespace std;
+
+float move_right = 0.0f;
+float speed =0.49999;
+void top_box_1()
+{
+    glColor3d(1,1,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_right, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 25.0f);
+    glVertex2f(10.0f, 25.0f);
+    glVertex2f(10.0f, 35.0f);
+    glVertex2f(0.0f, 35.0);
+    glEnd();
+    glPopMatrix();
+}
+void top_box_2()
+{
+    glColor3d(1,1,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_right, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 10.0f);
+    glVertex2f(10.0f, 10.0f);
+    glVertex2f(10.0f, 20.0f);
+    glVertex2f(0.0f, 20.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_right(int value)
+{
+    if(move_right>50) //boundary for the positive x axis for last part of the box
+    {
+        move_right = -60;//reappear the box
+    }
+    else if (move_right<-60) //boundary for the positive x axis for last part of the box
+    {
+        move_right = 50;//reappear the box
+    }
+    move_right += speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_right, 0);
+}
+
+float move_left = 0.0f;
+void bottom_box_1()
+{
+    glColor3d(1,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef( move_left,0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(20.0f, -20.0f);
+    glVertex2f(30.0f, -20.0f);
+    glVertex2f(30.0f,-10.0f);
+    glVertex2f(20.0f, -10.0);
+    glEnd();
+    glPopMatrix();
+}
+void bottom_box_2()
+{
+    glColor3d(1,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef( move_left,0.0f,0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(20.0f, -35.0f);
+    glVertex2f(30.0f, -35.0f);
+    glVertex2f(30.0f, -25.0f);
+    glVertex2f(20.0f, -25.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_left(int value)
+{
+    if(move_left < -80) //boundary for the negative x axis for last part of the box
+    {
+        move_left = 30;//reappear the box
+    }
+    else if (move_left >30)
+    {
+    }
+    move_left -= speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_left, 0);
+}
+void handleMouse(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON)
+    {
+        glutTimerFunc(20, update_left, 0);
+    }
+    if (button == GLUT_RIGHT_BUTTON)
+    {
+        glutTimerFunc(20, update_right, 0);
+    }
+    glutPostRedisplay();
+}
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 's': //stop
+        speed = 0.0f;
+        break;
+    case 'r': //restart
+        speed = 0.49999f;
+        break;
+        glutPostRedisplay();
+    }
+}
+void identity_axis()
+{
+    glLoadIdentity(); //Reset the drawing perspective
+    gluOrtho2D(-50,50,-50,50);
+}
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    top_box_1();
+    top_box_2();
+    bottom_box_1();
+    bottom_box_2();
+    glutSwapBuffers();
+}
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(1350, 700);
+    glutCreateWindow("Mouse Interaction");
+    glutDisplayFunc(display);
+    identity_axis();
+    glutKeyboardFunc(handleKeypress);
+    glutMouseFunc(handleMouse);
+    glutMainLoop();
+    return 0;
+}

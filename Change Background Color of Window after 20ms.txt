@@ -1,0 +1,119 @@
+#include iostream
+#includeGLgl.h
+#include GLglut.h
+using namespace std;
+
+float move_1 = 0.0f;
+float move_2 = 0.0f;
+void display();
+
+void top_box()
+{
+    glColor3d(0,0,1);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_1, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 20.0f);
+    glVertex2f(10.0f, 20.0f);
+    glVertex2f(10.0f, 30.0f);
+    glVertex2f(0.0f, 30.0);
+    glEnd();
+    glPopMatrix();
+}
+
+void update_1(int value)
+{
+    move_1 += 0.49999; assume as moving speed
+    if(move_150) boundary for the positive x axis for last part of the box
+    {
+        move_1 = -61;reappear the box
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, update_1, 0);
+}
+void bottom_box()
+{
+    glColor3d(1,1,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_2, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(-10.0f, 0.0f);
+    glVertex2f(-10.0f, 10.0f);
+    glVertex2f(0.0f, 10.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_2(int value)
+{
+    move_2 -= 0.49999; assume as moving speed
+    if(move_2  -50) boundary for the negative x axis for last part of the box
+    {
+        move_2 = 61;reappear the box
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, update_2, 0);
+}
+void displayback(int x)again start from white
+{
+    glutDisplayFunc(display);
+}
+void display_2()
+{
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    top_box();
+    bottom_box();
+    glutTimerFunc(500,displayback,0);
+    glutSwapBuffers();
+}
+void Scene_2(int x)third call green
+{
+    glutDisplayFunc(display_2);
+}
+void display_1()
+{
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    top_box();
+    bottom_box();
+    glutTimerFunc(500,Scene_2,0);
+    glutSwapBuffers();
+}
+void Scene_1(int x) second call red
+{
+    glutDisplayFunc(display_1);
+}
+void display()
+{
+    glClearColor(1.0f, 1.0f,1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    top_box();
+    bottom_box();
+    glutTimerFunc(500,Scene_1,0);
+    glutSwapBuffers();
+}
+void Scene()first call white
+{
+    glutDisplayFunc(display);
+}
+void identity_axis()
+{
+    glLoadIdentity(); Reset the drawing perspective
+    gluOrtho2D(-50,50,-50,50);
+}
+int main(int argc, char argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE  GLUT_RGB);
+    glutInitWindowSize(1350, 700);
+    glutCreateWindow(Background Color Change);
+    glutDisplayFunc(Scene);
+    identity_axis();
+    glutTimerFunc(20, update_1, 0); Add a timer
+    glutTimerFunc(20, update_2, 0); Add a timer
+    glutMainLoop();
+    return 0;
+}

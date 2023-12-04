@@ -1,0 +1,171 @@
+Code-
+#include <iostream>
+#include <GL/glut.h>
+using namespace std;
+
+void display();
+void scene();
+
+GLfloat position = 0.0f;
+GLfloat position_1 = 0.0f;
+GLfloat position_2 = 0.0f;
+GLfloat position_3 = 0.0f;
+GLfloat speed = 0.1f;
+
+void update_3(int value)
+{
+    if(position_3 >10)
+    {
+        position_3 = -4.0f;
+    }
+    position_3 += speed;
+    glutPostRedisplay();
+    glutTimerFunc(20,update_3,0);
+}
+void update_2(int value)
+{
+    if(position_2 >10)
+    {
+        position_2 = -4.0f;
+    }
+    position_2 += speed;
+    glutPostRedisplay();
+    glutTimerFunc(20,update_2,0);
+}
+void update_1(int value)
+{
+    if(position_1 <-8)
+    {
+        position_1 = 2.0f;
+    }
+    position_1 -= speed;
+    glutPostRedisplay();
+    glutTimerFunc(20,update_1,0);
+}
+void update(int value)
+{
+
+    if(position<-8)
+    {
+        position = 2.0f;
+    }
+    position -= speed;
+    glutPostRedisplay();
+    glutTimerFunc(20,update,0);
+}
+void displayback(int val)
+{
+    glutDisplayFunc(display);
+}
+void display_3()   //4th box
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glPushMatrix();
+glTranslatef(position_3,0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glVertex2f(6.0f, 6.0f);
+    glVertex2f(8.0f, 6.0f);
+    glVertex2f(8.0f, 8.0f);
+    glVertex2f(6.0f, 8.0f);
+    glEnd();
+    glPopMatrix();
+    glutTimerFunc(1500,displayback,0);
+    glFlush();
+}
+void scene_3(int val)
+{
+    glutDisplayFunc(display_3);
+}
+void display_2()    //3rd box
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glPushMatrix();
+    {
+    glTranslatef(position_2,0.0f, 0.0f);
+        glBegin(GL_QUADS);
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glVertex2f(2.0f, 6.0f);
+        glVertex2f(4.0f, 6.0f);
+        glVertex2f(4.0f, 8.0f);
+        glVertex2f(2.0f, 8.0f);
+        glEnd();
+        glPopMatrix();
+        glutTimerFunc(1500,scene_3,0);
+        glFlush();
+    }
+}
+void scene_2(int val)
+{
+    glutDisplayFunc(display_2);
+}
+
+void display_1()    //2nd box
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glPushMatrix();
+glTranslatef(position_1,0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex2f(6.0f, 2.0f);
+    glVertex2f(8.0f, 2.0f);
+    glVertex2f(8.0f, 4.0f);
+    glVertex2f(6.0f, 4.0f);
+    glEnd();
+    glPopMatrix();
+    glutTimerFunc(1500,scene_2,0);
+    glFlush();
+}
+void scene_1(int val)
+{
+    glutDisplayFunc(display_1);
+}
+
+void display()   //1st box
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glPushMatrix();
+glTranslatef(position,0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(2.0f, 2.0f);
+    glVertex2f(4.0f, 2.0f);
+    glVertex2f(4.0f, 4.0f);
+    glVertex2f(2.0f, 4.0f);
+    glEnd();
+    glPopMatrix();
+    glutTimerFunc(1500,scene_1,0);
+    glFlush();
+}
+void scene()
+{
+    glutDisplayFunc(display);
+}
+void identity_axis()
+{
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glLoadIdentity();
+    gluOrtho2D(0,10,0,10);
+}
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitWindowSize(1350, 700);
+    glutInitWindowPosition(50, 50);
+    glutCreateWindow("Four Object in Four Display Calling");
+    glutDisplayFunc(scene);
+    identity_axis();
+    {
+        glutTimerFunc(20, update, 0);
+    glutTimerFunc(20, update_1, 0);
+    glutTimerFunc(20, update_2, 0);
+    glutTimerFunc(20, update_3, 0);
+        glutMainLoop();
+        return 0;
+    }
+
+}

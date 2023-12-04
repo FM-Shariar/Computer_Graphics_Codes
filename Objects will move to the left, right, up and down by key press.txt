@@ -1,0 +1,182 @@
+Code-
+#include <iostream>
+#include <GL/glut.h>
+using namespace std;
+
+float speed = 0.49999;
+float move_1 = 0.0f;
+void top_box()
+{
+    glColor3d(1,1,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_1, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 20.0f);
+    glVertex2f(10.0f, 20.0f);
+    glVertex2f(10.0f, 30.0f);
+    glVertex2f(0.0f, 30.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_1(int value)
+{
+    if(move_1>50) //boundary for the positive x axis for last part of the box
+    {
+        move_1 = -61;//reappear the box
+    }
+    else if (move_1<-61)
+    {
+        move_1=50;
+    }
+    move_1 += speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_1, 0);
+}
+float move_2 = 0.0f;
+void bottom_box()
+{
+    glColor3d(1,1,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(move_2, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(-10.0f, 0.0f);
+    glVertex2f(-10.0f, 10.0f);
+    glVertex2f(0.0f, 10.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_2(int value)
+{
+    if(move_2 < -50) //boundary for the negative x axis for last part of the box
+    {
+        move_2 = 61;//reappear the box
+    }
+
+
+    else if(move_2>61)
+    {
+        move_2=-50;
+    }
+    move_2 -= speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_2, 0);
+}
+float move_3 = 0.0f;
+void left_box()
+{
+    glColor3d(1,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0.0f, move_3, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(-40.0f, 0.0f);
+    glVertex2f(-30.0f, 0.0f);
+    glVertex2f(-30.0f, 10.0f);
+    glVertex2f(-40.0f, 10.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_3(int value)
+{
+    if(move_3 > 50) //boundary for the negative x axis for last part of the box
+    {
+        move_3 = -60;//reappear the box
+    }
+    else if(move_3<-60)
+    {
+        move_3=50;
+    }
+    move_3 += speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_3, 0);
+}
+float move_4 = 0.0f;
+void right_box()
+
+{
+    glColor3d(1,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0.0f, move_4, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(30.0f, 0.0f);
+    glVertex2f(40.0f, 0.0f);
+    glVertex2f(40.0f, -10.0f);
+    glVertex2f(30.0f, -10.0);
+    glEnd();
+    glPopMatrix();
+}
+void update_4(int value)
+{
+    if(move_4 <-50) //boundary for the negative x axis for last part of the box
+    {
+        move_4 = 60;//reappear the box
+    }
+    else if(move_4>60)
+    {
+        move_4=-50;
+    }
+    move_4 -=speed; //assume as moving speed
+    glutPostRedisplay();
+    glutTimerFunc(20, update_4, 0);
+}
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'r'://right
+        glutTimerFunc(20, update_1, 0);
+        glutPostRedisplay();
+        break;
+    case 'l': //left
+        glutTimerFunc(20, update_2, 0);
+
+        glutPostRedisplay();
+        break;
+    case 'u': //up
+        glutTimerFunc(20, update_3, 0);
+        glutPostRedisplay();
+        break;
+    case 'd': //down
+        glutTimerFunc(20, update_4, 0);
+        glutPostRedisplay();
+        break;
+    case 's': //stop
+        speed=0.0;
+        glutPostRedisplay();
+        break;
+    case 'a': //again start
+        speed=0.49999;
+        glutPostRedisplay();
+        break;
+    }
+}
+void identity_axis()
+{
+    glLoadIdentity(); //Reset the drawing perspective
+    gluOrtho2D(-50,50,-50,50);
+}
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    top_box();
+    bottom_box();
+    left_box();
+    right_box();
+    glutSwapBuffers();
+}
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(800, 800);
+    glutCreateWindow("Keyboard Interaction");
+    glutDisplayFunc(display);
+    identity_axis();
+    glutKeyboardFunc(handleKeypress);
+    glutMainLoop();
+    return 0;
+}
