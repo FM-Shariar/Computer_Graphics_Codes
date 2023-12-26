@@ -1,0 +1,50 @@
+Designs->
+
+Sea
+Cargo Ships
+Sun
+Moon
+Stars
+Hills
+Water Falls (Optional)
+Roads
+Vehicle
+Clouds
+Tree(2 types)
+Buildings
+Windmill
+Crane
+Containers
+Port Warehouse
+Port
+Light House
+Birds(Optional)
+Lamp post(Optional)
+
+
+Animations->
+
+1. Sea water flow
+2. Clouds 
+3. Sun+Moon rise/set
+4. Crane Work
+5. Windmill Rotation 
+6. Ship 
+7. Vehicle
+8. Day/Night
+9. Rain/Snow
+10.Keyboard Functions
+11. 
+
+Need to follow:
+1. glOrtho(-1350, 1350, -700, 700, 0 , 0);
+2. glutInitWindowSize (1350, 700);
+3. glutInitWindowPosition (0, 0);
+4. All the Position+Angle+speed of each Object should be named like Example -> float Sun_Pos = 0.0;/ float Sun_Ang = 
+float Cloud1_Spe = 1.0; float Cloud2_Spe = 2.5; float Cloud3_Spe = 2.0; 
+5. Use glColor3ub (--, --, --); instade of glColor3f (-.-, -.-, -.-); it will help to access direct to the rgb colour space.
+6. Each persons code should be in a function named by their own Name. void Shariar(){.....};
+7. Every Single objects code should inside a function named by the objects name itself EX: void Sun(){....};
+8. 
+
+

@@ -1,0 +1,590 @@
+#include<cstdio>
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include<math.h>
+#define PI          3.141516
+
+
+GLfloat ship_position = 0.0f;
+GLfloat ship_speed = 0.01f;
+float boat_position = 0.0f;
+float boat_speed = 0.001f;
+
+float car1position=0;
+float car1speed=0.005;
+
+float car2position=0;
+float car2speed=0.005;
+
+float rainPosition=1;
+float rainSpeed=0.02;
+
+bool isRain=false;
+
+float icePosition=1;
+float iceSpeed=0.02;
+
+bool isWinter=false;
+
+int wheel_angle=0;
+
+float busPosition=0.0;
+float busSpeed=0.009;
+
+float cloudPosition=0.0;
+float cloudSpeed=0.003;
+
+float sunPosition=0.0;
+float sunSpeed=0.003;
+
+float man1Position=0.3f;
+float man1Speed=0.008;
+;
+float man2Position=-0.4f;
+float man2Speed=0.012;
+
+float man3Position=0.8f;
+float man3Speed=0.01;
+
+float man4Position=0.9f;
+float man4Speed=0.015;
+
+
+float ambulance_position=0;
+float ambulance_speed=0.01;
+
+float police_car_position=0;
+float police_car_speed=0.01;
+
+float planePosition=0;
+float planeSpeed=0.025;
+
+
+int covidPhase=1;
+    ///pahse 1 is before covid
+    ///phase 2 is during covid
+    ///phase 3 is after covid
+
+
+void update(int value)
+{
+    planePosition-=planeSpeed;
+    if(planePosition<-1.0)
+    {
+        planePosition=1.0;
+    }
+
+    man1Position+=man1Speed;
+    if(man1Position>1.0)
+    {
+        man1Position=-1.0;
+    }
+    man2Position+=man2Speed;
+    if(man2Position>1.0)
+    {
+        man2Position=-1.0;
+    }
+    man3Position-=man3Speed;
+    if(man1Position<-1.0)
+    {
+        man3Position=1.0;
+    }
+    man4Position-=man4Speed;
+    if(man4Position<-1.0)
+    {
+        man4Position=1.0;
+    }
+
+    rainPosition-=rainSpeed;
+    if(rainPosition<-1.0)
+    {
+        rainPosition=1;
+    }
+    icePosition-=iceSpeed;
+    if(icePosition<-1.0)
+    {
+        icePosition=1;
+    }
+   if(car1position <=-1.0)
+       car1position = 1.0f;
+   car1position -= car1speed;
+
+   if(car2position <=-1.0)
+       car2position = 1.0f;
+   car2position -= car2speed;
+
+    if (ship_position>=1)
+    {
+        ship_position=-1;
+    }
+    ship_position+=ship_speed;
+
+
+    boat_position -= boat_speed;
+    if(boat_position <-1.0)
+        boat_position = 1.0f;
+
+    wheel_angle-=10;
+    if(wheel_angle>=360)
+    {
+        wheel_angle=0;
+    }
+    busPosition+=busSpeed;
+    if(busPosition>1.0)
+    {
+        busPosition=-1.0;
+    }
+
+    cloudPosition+=cloudSpeed;
+    if(cloudPosition>1.0)
+    {
+        cloudPosition=-1.0;
+    }
+
+    sunPosition+=sunSpeed;
+    if(sunPosition>1.0)
+    {
+        sunPosition=-1.0;
+    }
+
+    if (ambulance_position>=2)
+    {
+        ambulance_position=-1;
+    }
+    ambulance_position+=ambulance_speed;
+
+    if (police_car_position>=2)
+    {
+        police_car_position=-1;
+    }
+    police_car_position+=police_car_speed;
+
+
+
+glutPostRedisplay();
+glutTimerFunc(100, update, 0);
+}
+
+
+void road(){
+   //--------------------Road for Car---------------------
+
+glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.2f, 0.2f, 0.2f); // Red
+
+glVertex2f(-1.0f, -1.0f);    // x, y
+glVertex2f(1.0f, -1.0f);    // x, y
+glVertex2f(1.0f, -0.35f);    // x, y
+glVertex2f(-1.0f, -0.35f);    // x, y
+glEnd();
+
+
+//-------------road white-black side(black)----------------
+
+glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+glVertex2f(-1.0f, -0.35f);    // x, y
+glVertex2f(1.0f, -0.35f);    // x, y
+glVertex2f(1.0f, -0.3f);    // x, y
+glVertex2f(-1.0f, -0.3f);    // x, y
+glEnd();
+
+///////////-------------road white-black side(white)----------------////////
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-1.0f, -0.35f);    // x, y
+glVertex2f(-0.80f, -0.35f);    // x, y
+glVertex2f(-0.80f, -0.3f);    // x, y
+glVertex2f(-1.0f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-0.60f, -0.35f);    // x, y
+glVertex2f(-0.40f, -0.35f);    // x, y
+glVertex2f(-0.40f, -0.3f);    // x, y
+glVertex2f(-0.60f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-0.20f, -0.35f);    // x, y
+glVertex2f(0.00f, -0.35f);    // x, y
+glVertex2f(0.00f, -0.3f);    // x, y
+glVertex2f(-0.20f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(0.20f, -0.35f);    // x, y
+glVertex2f(0.40f, -0.35f);    // x, y
+glVertex2f(0.40f, -0.3f);    // x, y
+glVertex2f(0.20f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(0.60f, -0.35f);    // x, y
+glVertex2f(0.80f, -0.35f);    // x, y
+glVertex2f(0.80f, -0.3f);    // x, y
+glVertex2f(0.60f, -0.3f);    // x, y
+glEnd();
+
+
+
+//------------------road yellow line-----------
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-1.0f, -0.67f);    // x, y
+glVertex2f(-0.80f, -0.67f);    // x, y
+glVertex2f(-0.80f, -0.7f);    // x, y
+glVertex2f(-1.0f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-0.60f, -0.67f);    // x, y
+glVertex2f(-0.40f, -0.67f);    // x, y
+glVertex2f(-0.40f, -0.7f);    // x, y
+glVertex2f(-0.60f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-0.20f, -0.67f);    // x, y
+glVertex2f(0.00f, -0.67f);    // x, y
+glVertex2f(0.00f, -0.7f);    // x, y
+glVertex2f(-0.20f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(0.20f, -0.67f);    // x, y
+glVertex2f(0.40f, -0.67f);    // x, y
+glVertex2f(0.40f, -0.7f);    // x, y
+glVertex2f(0.20f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(0.60f, -0.67f);    // x, y
+glVertex2f(0.80f, -0.67f);    // x, y
+glVertex2f(0.80f, -0.7f);    // x, y
+glVertex2f(0.60f, -0.7f);    // x, y
+glEnd();
+
+
+}
+
+
+void car1(){
+//------------car1-----------------------------
+
+   glPushMatrix();
+   glTranslatef(car1position,0.0f, 0.0f);
+   //car-1
+   glBegin(GL_QUADS);
+   glColor3f(0.9f,0.9f,1.0f);
+   glVertex2f(0.45f, -0.85f);
+glVertex2f(0.5f, -0.75f);
+glVertex2f(0.6f, -0.75f);
+glVertex2f(0.65f, -0.85f);
+
+glEnd();
+
+
+   glBegin(GL_QUADS);
+   glColor3f(0.9f,0.8f,1.0f);
+   glVertex2f(0.4f, -0.95f);
+glVertex2f(0.4f, -0.85f);
+glVertex2f(0.7f, -0.85f);
+glVertex2f(0.7f, -0.95f);
+
+glEnd();
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+glVertex2f(0.45f, -0.85f);    // x, y
+glVertex2f(0.65f, -0.85f);    // x, y
+
+glEnd();
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+glVertex2f(0.55f, -0.85f);    // x, y
+glVertex2f(0.55f, -0.75f);    // x, y
+
+glEnd();
+          //----wheel1-----
+
+   int jeight;
+   GLfloat p20=.65f;
+   GLfloat q20=-0.95f;
+   GLfloat radius8 =.03f;
+   int triangleAmount8 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi20 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p20, q20); // center of circle
+   for(jeight = 0; jeight <= triangleAmount8; jeight++)
+   {
+       glVertex2f(
+           p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+           q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+       );
+   }
+   glEnd();
+
+    //----wheel2-----
+   int height;
+   GLfloat p21=0.45f;
+   GLfloat q21=-0.95f;
+   GLfloat radius6 =.03f;
+   int triangleAmount21 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi21 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p21, q21); // center of circle
+   for(height = 0; height <= triangleAmount21; height++)
+   {
+       glVertex2f(
+           p21 + (radius6 * cos(height *  twicePi21 / triangleAmount21)),
+           q21 + (radius6 * sin(height * twicePi21 / triangleAmount21))
+       );
+   }
+   glEnd();
+   glPopMatrix();
+
+
+}
+
+GLfloat position2 = 0.0f;
+
+
+void car2(){
+
+   glPushMatrix();
+   glTranslatef(car2position,0.0f, 0.0f);
+
+   glBegin(GL_QUADS);
+   glColor3f(1.0f,1.0f,1.0f);
+   glVertex2f(-0.45f, -0.5f);
+glVertex2f(-0.5f, -0.4f);
+glVertex2f(-0.6f, -0.4f);
+glVertex2f(-0.65f, -0.5f);
+
+glEnd();
+
+   glBegin(GL_QUADS);
+   glColor3f(1.0f,0.0f,0.0f);
+   glVertex2f(-0.4f, -0.6f);
+glVertex2f(-0.4f, -0.5f);
+glVertex2f(-0.7f, -0.5f);
+glVertex2f(-0.7f, -0.6f);
+
+glEnd();
+
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(1.0f,0.0f,0.0f); // Red
+glVertex2f(-0.55f, -0.5f);    // x, y
+glVertex2f(-0.55f, -0.4f);    // x, y
+
+glEnd();
+          //----wheel1-----
+
+   int jeight;
+   GLfloat p20=-0.65f;
+   GLfloat q20=-0.6f;
+   GLfloat radius8 =.03f;
+   int triangleAmount8 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi20 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p20, q20); // center of circle
+   for(jeight = 0; jeight <= triangleAmount8; jeight++)
+   {
+       glVertex2f(
+           p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+           q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+       );
+   }
+   glEnd();
+
+    //----wheel2-----
+   int height;
+   GLfloat p21=-0.45f;
+   GLfloat q21=-0.6f;
+   GLfloat radius6 =.03f;
+   int triangleAmount21 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi21 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p21, q21); // center of circle
+   for(height = 0; height <= triangleAmount21; height++)
+   {
+       glVertex2f(
+           p21 + (radius6 * cos(height *  twicePi21 / triangleAmount21)),
+           q21 + (radius6 * sin(height * twicePi21 / triangleAmount21))
+       );
+   }
+   glEnd();
+glPopMatrix();
+
+}
+
+
+
+void display()
+{
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //// Set background color to black and opaque
+	glClear(GL_COLOR_BUFFER_BIT);         //// Clear the color buffer (background)
+	road();
+	car1();
+	car2();
+
+	glFlush();  //// Render now
+}
+void handleMouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON)
+    {
+        car1speed+=0.001;
+        car2speed+=0.001;
+        ship_speed+=0.001;
+        planeSpeed+=0.001;
+        boat_speed+=0.001;
+        police_car_speed+=0.001;
+        busSpeed+=0.001;
+        ambulance_speed+=0.001;
+    }
+    if (button == GLUT_RIGHT_BUTTON)
+    {
+        car1speed-=0.001;
+        if(car1speed<=0)
+        {
+            car1speed=0.001;
+        }
+        car2speed-=0.001;
+        if(car2speed<=0)
+        {
+            car2speed=0.001;
+        }
+        ship_speed-=0.001;
+        if(ship_speed<=0)
+        {
+            ship_speed=0.001;
+        }
+        planeSpeed-=0.001;
+        if(planeSpeed<=0)
+        {
+            planeSpeed=0.001;
+        }
+        boat_speed-=0.001;
+        if(boat_speed<=0)
+        {
+            boat_speed=0.001;
+        }
+        police_car_speed-=0.001;
+        if(police_car_speed<=0)
+        {
+            police_car_speed=0.001;
+        }
+        busSpeed-=0.001;
+        if(busSpeed<=0)
+        {
+            busSpeed=0.001;
+        }
+        ambulance_speed-=0.001;
+        if(ambulance_speed<=0)
+        {
+            ambulance_speed=0.001;
+        }
+    }
+    glutPostRedisplay();
+}
+
+
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+        case 'r':
+            if(isRain)
+            {
+                isRain=false;
+            }
+            else
+            {
+                isRain=true;
+                isWinter=false;
+            }
+            break;
+        case 'w':
+            if(isWinter)
+            {
+                isWinter=false;
+            }
+            else
+            {
+                isWinter=true;
+                isRain=false;
+            }
+            break;
+        case 'c':
+            if(covidPhase==1)
+            {
+                covidPhase=2;
+            }
+            else if(covidPhase==2)
+            {
+                covidPhase=3;
+            }
+            else
+            {
+                covidPhase=1;
+            }
+            break;
+        glutPostRedisplay();
+    }
+}
+
+
+
+
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);                 //// Initialize GLUT
+	glutCreateWindow("OpenGL Setup"); //// Create a window with the given title
+	glutInitWindowSize(320, 320);   //// Set the window's initial width & height
+	glutDisplayFunc(display); //// Register display callback handler for window re-paint
+	glutTimerFunc(100, update, 0);
+   glutKeyboardFunc(handleKeypress);
+   glutMouseFunc(handleMouse);
+	glutMainLoop();           //// Enter the event-processing loop
+	return 0;
+}

@@ -1,0 +1,131 @@
+Author 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task1
+{
+    class Author
+    {
+        public string Name;
+        public string email;
+        public string gender;
+
+        public  Author (string name, string email, string gender)
+        {
+            this.Name = name;
+            this.email = email;
+            this.gender = gender;
+        }
+        public void ShowInfo()
+        {
+            Console.WriteLine("Author name :" + Name);
+            Console.WriteLine("Email Address:" + email);
+            Console.WriteLine("gender :" + gender);
+        }
+    }
+}
+
+
+Book:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task1
+{
+    class Book
+    {
+        string title;
+        Author author;
+        double price;
+        ushort quantity;
+        public string Title
+        {
+            set
+            {
+                title = value;
+            }
+            get
+            {
+                return title;
+            }
+        }
+        public Author AUTHOR
+        {
+            set
+            {
+                author = value;
+            }
+            get
+            {
+                return author;
+            }
+        }
+        public double Price
+        {
+            set
+            {
+                if (value > 0)
+                {
+                    price = value;
+                }
+            }
+            get
+            {
+                return price;
+            }
+        }
+        public ushort Quantity
+        {
+            set
+            {
+                quantity = value;
+            }
+            get
+            {
+                return quantity;
+            }
+        }
+        public Book(string title, Author author, double price, ushort quantity)
+        {
+            this.title = title;
+            this.author = author;
+            this.price = price;
+            this.quantity = quantity;
+        }
+        public void ShowDetails()
+        {
+            Console.WriteLine("Title: " + this.title);
+            Console.WriteLine("Price: " + price);
+            Console.WriteLine("Quantity: " + quantity);
+            author.ShowInfo();
+        }
+    }
+}
+
+Program:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Author author1 = new Author("Susan", "susan@gmail.com", "M");
+            Book book1 = new Book("Chemistry", author1, 100, 50);
+            book1.ShowDetails();
+            Console.ReadLine();
+        }
+    }
+}

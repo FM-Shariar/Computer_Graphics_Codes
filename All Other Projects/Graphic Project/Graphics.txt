@@ -1,0 +1,2548 @@
+#include<cstdio>
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include<math.h>
+#define PI          3.141516
+
+
+GLfloat ship_position = 0.0f;
+GLfloat ship_speed = 0.01f;
+float boat_position = 0.0f;
+float boat_speed = 0.01f;
+
+float car1position=0;
+float car1speed=0.02;
+
+float car2position=0;
+float car2speed=0.02;
+
+void update(int value)
+{
+
+
+   if(car1position <=-1.0)
+       car1position = 1.0f;
+   car1position -= car1speed;
+
+   if(car2position <=-1.0)
+       car2position = 1.0f;
+   car2position -= car2speed;
+
+    if (ship_position>=1)
+    {
+        ship_position=-1;
+    }
+    ship_position+=ship_speed;
+
+    if(boat_position <-1.0)
+        boat_position = 1.0f;
+    boat_position -= boat_speed;
+
+glutPostRedisplay();
+glutTimerFunc(100, update, 0);
+}
+
+void circle(float p1, float q1, float r1)
+{
+    int i;
+    int tringle2=40;
+
+    GLfloat tp2 =2.0f * PI  ;
+
+    glBegin (GL_TRIANGLE_FAN);
+
+    glVertex2f (p1,q1);
+    for(i= 0;i<=tringle2; i++)
+    {
+        glVertex2f (
+                    p1+(r1*cos(i*tp2/tringle2)),
+                    q1+(r1*sin(i*tp2/tringle2))
+                    );
+
+
+    }
+    glEnd ();
+}
+void lamplight()
+{
+    glPushMatrix();
+    glTranslatef(0.06,0.13,0);
+    glRotatef(35,0,0,1);
+    ///lamp post light circle
+        glPushMatrix();
+        ///rotating circle along x axis to make it ellipse
+        glRotatef(60,1,0,0);
+        ///outer circle
+        glColor3f(1,1,1);
+        circle(0,0,0.08);
+        ///inner circle
+        glColor3f(1,0,1);
+        circle(0,0,0.07);
+        glColor3f(1,1,1);
+        glBegin(GL_QUADS);
+            ///lamp post light 1
+            glVertex2f(0.01,0.01);
+            glVertex2f(0.04,0.01);
+            glVertex2f(0.04,0.04);
+            glVertex2f(0.01,0.04);
+
+            ///lamp post light 2
+            glVertex2f(-0.01,-0.01);
+            glVertex2f(-0.04,-0.01);
+            glVertex2f(-0.04,-0.04);
+            glVertex2f(-0.01,-0.04);
+
+            ///lamp post light 3
+            glVertex2f(0.01,-0.01);
+            glVertex2f(0.04,-0.01);
+            glVertex2f(0.04,-0.04);
+            glVertex2f(0.01,-0.04);
+
+            ///lamp post light 4
+            glVertex2f(-0.01,0.01);
+            glVertex2f(-0.04,0.01);
+            glVertex2f(-0.04,0.04);
+            glVertex2f(-0.01,0.04);
+
+        glEnd();
+        glPopMatrix();
+    glPopMatrix();
+}
+void lampStand()
+{
+    glColor3f(0.2,0.2,0.6);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.01,-0.2);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.01,-0.2);
+    glEnd();
+}
+void lampPostRight()
+{
+    lampStand();
+    lamplight();
+}
+void lampPostLeft()
+{
+    lampStand();
+    glPushMatrix();
+    glRotatef(180,0,1,0);
+    lamplight();
+    glPopMatrix();
+}
+void lampPost()
+{
+    glPushMatrix();
+    glTranslatef(0.1,0,0);
+    lampPostRight();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.1,0,0);
+    lampPostLeft();
+    glPopMatrix();
+}
+void allLampPost()
+{
+    lampPost();
+    glPushMatrix();
+    glTranslatef(0.7,0,0);
+    lampPost();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.7,0,0);
+    lampPost();
+    glPopMatrix();
+}
+void human(float red, float green, float blue, float x, float y)
+{
+    glPushMatrix();
+    glTranslatef(x,y,0);
+    //human1
+    //shirt
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(red, green, blue); // Red
+
+	glVertex2f(0.0f, -0.13f);    // x, y
+	glVertex2f(0.07f, -0.13f);    // x, y
+
+	glVertex2f(0.07f, -0.06f);    // x, y
+	glVertex2f(0.0f, -0.06f);    // x, y
+	glEnd();
+
+	//left hand
+	glBegin(GL_QUADS);
+    glColor3f(0.8, 0.8, 0.7f);
+
+    glVertex2f(0.0f,-0.145f);
+    glVertex2f(-0.015f,-0.145f);
+    glVertex2f(-0.012f,-0.06f);
+    glVertex2f(0.0f,-0.06f);
+    glEnd();
+
+	//left hand sleave
+	glBegin(GL_QUADS);
+    glColor3f(red, green, blue);
+
+    glVertex2f(0.0f,-0.1f);
+    glVertex2f(-0.015f,-0.1f);
+    glVertex2f(-0.012f,-0.06f);
+    glVertex2f(0.0f,-0.06f);
+    glEnd();
+
+    ///right hand
+	glBegin(GL_QUADS);
+    glColor3f(0.8, 0.8, 0.7f);
+
+    glVertex2f(0.07f,-0.145f);
+    glVertex2f(0.085f,-0.145f);
+    glVertex2f(0.082f,-0.06f);
+    glVertex2f(0.07f,-0.06f);
+    glEnd();
+
+
+
+	///right hand sleave
+	glBegin(GL_QUADS);
+    glColor3f(red, green, blue);
+
+    glVertex2f(0.07f,-0.1f);
+    glVertex2f(0.085f,-0.1f);
+    glVertex2f(0.082f,-0.06f);
+    glVertex2f(0.07f,-0.06f);
+    glEnd();
+
+	//leg
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.6f); // Red
+
+	glVertex2f(0.0f, -0.2f);    // x, y
+	glVertex2f(0.02f, -0.2f);    // x, y
+
+	glVertex2f(0.07f, -0.13f);    // x, y
+	glVertex2f(0.0f, -0.13f);    // x, y
+	glEnd();
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.6f); // Red
+
+	glVertex2f(0.05f, -0.2f);    // x, y
+	glVertex2f(0.07f, -0.2f);    // x, y
+
+	glVertex2f(0.07f, -0.13f);    // x, y
+	glVertex2f(0.03f, -0.16f);    // x, y
+	glEnd();
+	//show
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+	glVertex2f(0.0f, -0.22f);    // x, y
+	glVertex2f(0.02f, -0.22f);    // x, y
+
+	glVertex2f(0.02f, -0.2f);    // x, y
+	glVertex2f(0.0f, -0.2f);    // x, y
+	glEnd();
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+	glVertex2f(0.05f, -0.22f);    // x, y
+	glVertex2f(0.07f, -0.22f);    // x, y
+
+	glVertex2f(0.07f, -0.2f);    // x, y
+	glVertex2f(0.05f, -0.2f);    // x, y
+	glEnd();
+
+	//neck
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+	glVertex2f(0.025f, -0.06f);    // x, y
+	glVertex2f(0.045f, -0.06f);    // x, y
+
+	glVertex2f(0.045f, -0.04f);    // x, y
+	glVertex2f(0.025f, -0.04f);    // x, y
+	glEnd();
+
+	//face
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+	glVertex2f(0.01f, -0.04f);    // x, y
+	glVertex2f(0.06f, -0.04f);    // x, y
+
+	glVertex2f(0.06f, 0.0f);    // x, y
+	glVertex2f(0.01f, 0.0f);    // x, y
+	glEnd();
+
+	//hat
+	glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+	glVertex2f(0.01f, 0.0f);    // x, y
+	glVertex2f(0.06f, 0.0f);    // x, y
+
+	glVertex2f(0.05f, 0.03f);    // x, y
+	glVertex2f(0.02f, 0.03f);    // x, y
+	glEnd();
+
+	glPopMatrix();
+
+
+
+
+
+
+}
+void ship()
+{
+    /// ship
+
+	glPushMatrix();
+    glTranslatef(ship_position,-0.15,0);
+
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.2f, 0.31f);    /// x, y
+	glVertex2f(-0.88f, 0.31f);    /// x, y
+
+	glVertex2f(-0.88f, 0.1f);    /// x, y
+	glVertex2f(-0.3f, 0.1f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);/// ship up              /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.5f, 0.0f); /// blue
+
+	glVertex2f(-0.37f, 0.42f);    /// x, y
+	glVertex2f(-0.85f, 0.42f);    /// x, y
+
+	glVertex2f(-0.85f, 0.31f);    /// x, y
+	glVertex2f(-0.3f, 0.31f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);/// ship up 3             /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.3f, 0.5f); /// blue
+
+	glVertex2f(-0.45f, 0.53f);    /// x, y
+	glVertex2f(-0.8f, 0.53f);    /// x, y
+
+	glVertex2f(-0.8f, 0.42f);    /// x, y
+	glVertex2f(-0.39f, 0.42f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);/// ship up 4            /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.3f, 0.0f); /// blue
+
+	glVertex2f(-0.55f, 0.62f);    /// x, y
+	glVertex2f(-0.75f, 0.62f);    /// x, y
+
+	glVertex2f(-0.75f, 0.53f);    /// x, y
+	glVertex2f(-0.5f, 0.53f);    /// x, y
+	glEnd();
+
+
+
+	glBegin(GL_QUADS);  ///w1            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.74f, 0.4f);    /// x, y
+	glVertex2f(-0.8f, 0.4f);    /// x, y
+
+	glVertex2f(-0.8f, 0.33f);    /// x, y
+	glVertex2f(-0.74f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w2            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.62f, 0.4f);    /// x, y
+	glVertex2f(-0.68f, 0.4f);    /// x, y
+
+	glVertex2f(-0.68f, 0.33f);    /// x, y
+	glVertex2f(-0.62f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w3            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.5f, 0.4f);    /// x, y
+	glVertex2f(-0.56f, 0.4f);    /// x, y
+
+	glVertex2f(-0.56f, 0.33f);    /// x, y
+	glVertex2f(-0.5f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w4            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.39f, 0.4f);    /// x, y
+	glVertex2f(-0.45f, 0.4f);    /// x, y
+
+	glVertex2f(-0.45f, 0.33f);    /// x, y
+	glVertex2f(-0.39f, 0.33f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);  ///bw1            /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.68f, 0.51f);    /// x, y
+	glVertex2f(-0.75f, 0.51f);    /// x, y
+
+	glVertex2f(-0.75f, 0.43f);    /// x, y
+	glVertex2f(-0.68f, 0.43f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///bw2           /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.63f, 0.51f);    /// x, y
+	glVertex2f(-0.56f, 0.51f);    /// x, y
+
+	glVertex2f(-0.56f, 0.43f);    /// x, y
+	glVertex2f(-0.63f, 0.43f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);  ///bw3           /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.51f, 0.51f);    /// x, y
+	glVertex2f(-0.45f, 0.51f);    /// x, y
+
+	glVertex2f(-0.45f, 0.43f);    /// x, y
+	glVertex2f(-0.51f, 0.43f);    /// x, y
+	glEnd();
+
+
+    glBegin(GL_QUADS);  ///lbw1            /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.6f, 0.61f);    /// x, y
+	glVertex2f(-0.68f, 0.61f);    /// x, y
+
+	glVertex2f(-0.68f, 0.54f);    /// x, y
+	glVertex2f(-0.6f, 0.54f);    /// x, y
+	glEnd();
+
+
+    glPopMatrix();
+	///ship end
+}
+void boat()
+{
+    ///boat
+
+	glPushMatrix();
+    glTranslatef(boat_position,0,0);
+
+	glBegin(GL_QUADS);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.2f, 0.3f);    /// x, y
+	glVertex2f(0.6f, 0.3f);    /// x, y
+
+	glVertex2f(0.5f, 0.17f);    /// x, y
+	glVertex2f(0.3f, 0.17f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 1.0f); /// blue
+
+	glVertex2f(0.25f, 0.35f);    /// x, y
+	glVertex2f(0.45, 0.35f);    /// x, y
+
+	glVertex2f(0.45f, 0.3f);    /// x, y
+	glVertex2f(0.25f, 0.3f);    /// x, y
+	glEnd();
+
+	glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.33f,0.35f);
+   glVertex2f(0.33f, 0.3f);
+   glEnd();
+
+   glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.35f,0.35f);
+   glVertex2f(0.35f, 0.3f);
+   glEnd();
+
+   glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.4f,0.35f);
+   glVertex2f(0.4f, 0.3f);
+   glEnd();
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.33f, 0.58f);    /// x, y
+	glVertex2f(0.21f, 0.33f);    /// x, y
+	glVertex2f(0.33f, 0.35f);
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.35f, 0.58f);    /// x, y
+	glVertex2f(0.45f, 0.33f);    /// x, y
+	glVertex2f(0.35f, 0.35f);
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.4f, 0.55f);    /// x, y
+	glVertex2f(0.5f, 0.33f);    /// x, y
+	glVertex2f(0.4f, 0.35f);
+
+	glEnd();
+    glPopMatrix();
+}
+void plane()
+{
+
+    glPushMatrix();
+    glScalef(0.5, 0.5,1);;
+    glTranslatef(0, 0.8, 0);
+
+    glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.5f, 0.5f); /// Red
+
+	glVertex2f(-0.5f, 0.9f);    /// x, y
+	glVertex2f(-0.18f, 0.9f);    /// x, y
+	glVertex2f(-0.05f, 0.75f);    /// x, y
+	glVertex2f(-0.58f, 0.75f);
+	glEnd();
+
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// Red
+
+	glVertex2f(-0.47f, 0.85f);    /// x, y
+	glVertex2f(-0.4f, 0.85f);    /// x, y
+	glVertex2f(-0.4f, 0.8f);    /// x, y
+	glVertex2f(-0.47f, 0.8f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.2f, 0.87f);    /// x, y
+	glVertex2f(-0.32f, 0.9f);    /// x, y
+	glVertex2f(-0.15f, 0.98f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.35f, 0.76f);    /// x, y
+	glVertex2f(-0.25f, 0.78f);    /// x, y
+	glVertex2f(-0.18f, 0.6f);
+
+	glEnd();
+
+		glBegin(GL_TRIANGLES);             /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.1f, 0.75f);    /// x, y
+	glVertex2f(-0.15f, 0.82f);    /// x, y
+	glVertex2f(-0.02f, 0.8f);
+
+	glEnd();
+	glPopMatrix();
+}
+
+void river()
+{
+
+
+
+	///river
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.6f, 0.8f); /// blue
+
+	glVertex2f(-1.0f, -0.1f);    /// x, y
+	glVertex2f(1.0f, -0.1f);    /// x, y
+
+	glVertex2f(1.0f, 0.4f);    /// x, y
+	glVertex2f(-1.0f, 0.4f);    /// x, y
+	glEnd();
+
+
+	///bank  river
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glColor3f(0,0,0);
+	glVertex2f(-1.0,0.4);
+	glVertex2f(1.0, 0.4);
+	glEnd();
+
+    //tree
+
+	glBegin(GL_QUADS);  // tree 1            // Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.3f, 0.0f); // Red
+
+	glVertex2f(-0.95f, 0.36f);    // x, y
+	glVertex2f(-1.0f, 0.36f);    // x, y
+
+	glVertex2f(-1.0f, -0.25f);    // x, y
+	glVertex2f(-0.95f, -0.25f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(-1.0f, 0.7f);    // x, y
+	glVertex2f(-1.0f, 0.36f);    // x, y
+	glVertex2f(-0.8f, 0.36f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(-1.0f, 0.85f);    // x, y
+	glVertex2f(-1.0f, 0.6f);    // x, y
+	glVertex2f(-0.85f, 0.6f);
+
+	glEnd();
+
+
+
+	glBegin(GL_QUADS);  // tree 2           // Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.3f, 0.0f); // Red
+
+	glVertex2f(0.95f, 0.36f);    // x, y
+	glVertex2f(1.0f, 0.36f);    // x, y
+
+	glVertex2f(1.0f, -0.25f);    // x, y
+	glVertex2f(0.95f, -0.25f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(1.0f, 0.7f);    // x, y
+	glVertex2f(1.0f, 0.36f);    // x, y
+	glVertex2f(0.8f, 0.36f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(1.0f, 0.85f);    // x, y
+	glVertex2f(1.0f, 0.6f);    // x, y
+	glVertex2f(0.85f, 0.6f);
+
+	glEnd();
+
+
+    boat();
+
+    ship();
+
+
+
+}
+
+void SKY_Background()
+{
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //// Set background color to black and opaque
+	glClear(GL_COLOR_BUFFER_BIT);         //// Clear the color buffer (background)
+
+	//// Draw a Red 1x1 Square centered at origin
+	////sky
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 1.0f); //// sky-blue
+
+	glVertex2f(-1.0f, 0.4f);    //// x, y
+	glVertex2f(1.0f, 0.4f);    //// x, y
+
+	glVertex2f(1.0f, 1.0f);    //// x, y
+	glVertex2f(-1.0f, 1.0f);    //// x, y
+	glEnd();
+
+
+
+////tree 1
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.883f, 0.4f);    //// x, y
+	glVertex2f(-0.87f, 0.4f);    //// x, y
+
+	glVertex2f(-0.87f, 0.6f);    //// x, y
+	glVertex2f(-0.883, 0.6f);    //// x, y
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.9f,0.47f);
+    glVertex2f(-0.84f,0.47f);
+    glVertex2f(-0.89f,0.62f);
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.9f,0.5f);
+    glVertex2f(-0.84f,0.5f);
+    glVertex2f(-0.87f,0.7f);
+
+    glEnd();
+////tree 2
+
+
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.77f,0.4f);
+    glVertex2f(-0.7f,0.4f);
+    glVertex2f(-0.74f,0.7f);
+
+    glEnd();
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.5f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.72f, 0.4f);    //// x, y
+	glVertex2f(-0.4f, 0.4f);    //// x, y
+
+	glVertex2f(-0.4f, 0.42f);    //// x, y
+	glVertex2f(-0.72, 0.42f);    //// x, y
+	glEnd();
+////tree 3
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.533f, 0.5f);    //// x, y
+	glVertex2f(-0.52f, 0.5f);    //// x, y
+
+	glVertex2f(-0.52f, 0.6f);    //// x, y
+	glVertex2f(-0.533, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.59f,0.54f);
+    glVertex2f(-0.46f,0.54f);
+    glVertex2f(-0.53f,0.64f);
+    glEnd();
+
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.59f,0.57f);
+    glVertex2f(-0.46f,0.57f);
+    glVertex2f(-0.53f,0.68f);
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.34f,0.4f);
+    glVertex2f(-0.29f,0.4f);
+    glVertex2f(-0.32f,0.6f);
+
+    glEnd();
+
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.6f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.28f, 0.4f);    //// x, y
+	glVertex2f(0.0f, 0.4f);    //// x, y
+
+	glVertex2f(0.0f, 0.42f);    //// x, y
+	glVertex2f(-0.28, 0.42f);    //// x, y
+	glEnd();
+////tree 4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.057f, 0.4f);    //// x, y
+	glVertex2f(-0.044f, 0.4f);    //// x, y
+
+	glVertex2f(-0.044f, 0.53f);    //// x, y
+	glVertex2f(-0.057f, 0.53f);    //// x, y
+	glEnd();
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(-0.07f,0.48f);
+    glVertex2f(-0.03f,0.48f);
+    glVertex2f(-0.05f,0.65f);
+
+    glEnd();
+////tree 5
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(0.048f, 0.4f);    //// x, y
+	glVertex2f(0.064f, 0.4f);    //// x, y
+
+	glVertex2f(0.064f, 0.53f);    //// x, y
+	glVertex2f(0.048f, 0.53f);    //// x, y
+	glEnd();
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.03f,0.47f);
+    glVertex2f(0.081f,0.47f);
+    glVertex2f(0.06f,0.68f);
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.03f,0.48f);
+    glVertex2f(0.082f,0.48f);
+    glVertex2f(0.07f,0.64f);
+    glEnd();
+////tree 6
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.17f,0.4f);
+    glVertex2f(0.21f,0.4f);
+    glVertex2f(0.19f,0.6f);
+    glEnd();
+glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.31f,0.4f);
+    glVertex2f(0.34f,0.4f);
+    glVertex2f(0.33f,0.6f);
+    glEnd();
+   glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.31f,0.4f);
+    glVertex2f(0.34f,0.4f);
+    glVertex2f(0.33f,0.6f);
+    glEnd();
+
+////tree 7
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(0.444f, 0.4f);    //// x, y
+	glVertex2f(0.456f, 0.4f);    //// x, y
+
+	glVertex2f(0.456f, 0.5f);    //// x, y
+	glVertex2f(0.444f, 0.5f);    //// x, y
+	glEnd();
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.43f,0.44f);
+    glVertex2f(0.47f,0.44f);
+    glVertex2f(0.45f,0.6f);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.56f,0.4f);
+    glVertex2f(0.59f,0.4f);
+    glVertex2f(0.575f,0.55f);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.69f,0.4f);
+    glVertex2f(0.73f,0.4f);
+    glVertex2f(0.71f,0.6f);
+    glEnd();
+
+////tree 8
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.0f); //// sky-blue
+
+	glVertex2f(0.855f, 0.4f);    //// x, y
+	glVertex2f(0.875f, 0.4f);    //// x, y
+
+	glVertex2f(0.875f, 0.5f);    //// x, y
+	glVertex2f(0.855f, 0.5f);    //// x, y
+	glEnd();
+	glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.82f,0.44f);
+    glVertex2f(0.91f,0.44f);
+    glVertex2f(0.86f,0.67f);
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glColor3f(0.0f, 0.6f, 0.0f);
+
+    glVertex2f(0.83f,0.44f);
+    glVertex2f(0.9f,0.44f);
+    glVertex2f(0.88f,0.65f);
+    glEnd();
+
+	////Buildings
+	////1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.6f, 0.6f); //// sky-blue
+
+	glVertex2f(-1.0f, 0.4f);    //// x, y
+	glVertex2f(-0.91f, 0.4f);    //// x, y
+
+	glVertex2f(-0.91f, 0.6f);    //// x, y
+	glVertex2f(-1.0f, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.5f, 0.5f); //// sky-blue
+
+	glVertex2f(-0.91f, 0.4f);    //// x, y
+	glVertex2f(-0.89f, 0.4f);    //// x, y
+
+	glVertex2f(-0.89f, 0.57f);    //// x, y
+	glVertex2f(-0.91f, 0.6f);    //// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-1.0f, 0.47f);    //// x, y
+	glVertex2f(-0.97f, 0.47f);    //// x, y
+
+	glVertex2f(-0.97f, 0.52f);    //// x, y
+	glVertex2f(-1.0f, 0.52f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.96f, 0.47f);    //// x, y
+	glVertex2f(-0.93f, 0.47f);    //// x, y
+
+	glVertex2f(-0.93f, 0.52f);    //// x, y
+	glVertex2f(-0.96f, 0.52f);    //// x, y
+	glEnd();
+
+
+	////2
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.0f, 0.6f); //// sky-blue
+
+	glVertex2f(-0.86f, 0.4f);    //// x, y
+	glVertex2f(-0.76f, 0.4f);    //// x, y
+
+	glVertex2f(-0.76f, 0.65f);    //// x, y
+	glVertex2f(-0.86f, 0.65f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.4f, 0.0f, 0.4f); //// sky-blue
+
+	glVertex2f(-0.76f, 0.4f);    //// x, y
+	glVertex2f(-0.73f, 0.4f);    //// x, y
+
+	glVertex2f(-0.73f, 0.62f);    //// x, y
+	glVertex2f(-0.76f, 0.65f);    //// x, y
+	glEnd();
+////windows
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.84f, 0.43f);    //// x, y
+	glVertex2f(-0.81f, 0.43f);    //// x, y
+
+	glVertex2f(-0.81f, 0.48f);    //// x, y
+	glVertex2f(-0.84f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.8f, 0.43f);    //// x, y
+	glVertex2f(-0.77f, 0.43f);    //// x, y
+
+	glVertex2f(-0.77f, 0.48f);    //// x, y
+	glVertex2f(-0.8f, 0.48f);    //// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.84f, 0.5f);    //// x, y
+	glVertex2f(-0.81f, 0.5f);    //// x, y
+
+	glVertex2f(-0.81f, 0.55f);    //// x, y
+	glVertex2f(-0.84f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.8f, 0.5f);    //// x, y
+	glVertex2f(-0.77f, 0.5f);    //// x, y
+
+	glVertex2f(-0.77f, 0.55f);    //// x, y
+	glVertex2f(-0.8f, 0.55f);    //// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.84f, 0.57f);    //// x, y
+	glVertex2f(-0.81f, 0.57f);    //// x, y
+
+	glVertex2f(-0.81f, 0.62f);    //// x, y
+	glVertex2f(-0.84f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.8f, 0.57f);    //// x, y
+	glVertex2f(-0.77f, 0.57f);    //// x, y
+
+	glVertex2f(-0.77f, 0.62f);    //// x, y
+	glVertex2f(-0.8f, 0.62f);    //// x, y
+	glEnd();
+
+	////3
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.6f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.72f, 0.4f);    //// x, y
+	glVertex2f(-0.62f, 0.4f);    //// x, y
+
+	glVertex2f(-0.62f, 0.71f);    //// x, y
+	glVertex2f(-0.72f, 0.71f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.4f, 0.4f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.62f, 0.4f);   //// x, y
+	glVertex2f(-0.59f, 0.4f);    //// x, y
+
+	glVertex2f(-0.59f, 0.65f);    //// x, y
+	glVertex2f(-0.62f, 0.71f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.7f, 0.43f);    //// x, y
+	glVertex2f(-0.67f, 0.43f);    //// x, y
+
+	glVertex2f(-0.67f, 0.48f);    //// x, y
+	glVertex2f(-0.7f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.66f, 0.43f);    //// x, y
+	glVertex2f(-0.63f, 0.43f);    //// x, y
+
+	glVertex2f(-0.63f, 0.48f);    //// x, y
+	glVertex2f(-0.66f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.7f, 0.5f);    //// x, y
+	glVertex2f(-0.67f, 0.5f);    //// x, y
+
+	glVertex2f(-0.67f, 0.55f);    //// x, y
+	glVertex2f(-0.7f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.66f, 0.5f);    //// x, y
+	glVertex2f(-0.63f, 0.5f);    //// x, y
+
+	glVertex2f(-0.63f, 0.55f);    //// x, y
+	glVertex2f(-0.66f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.7f, 0.57f);    //// x, y
+	glVertex2f(-0.67f, 0.57f);    //// x, y
+
+	glVertex2f(-0.67f, 0.62f);    //// x, y
+	glVertex2f(-0.7f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.66f, 0.57f);    //// x, y
+	glVertex2f(-0.63f, 0.57f);    //// x, y
+
+	glVertex2f(-0.63f, 0.62f);    //// x, y
+	glVertex2f(-0.66f, 0.62f);    //// x, y
+	glEnd();
+    ////p4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.7f, 0.64f);    //// x, y
+	glVertex2f(-0.67f, 0.64f);    //// x, y
+
+	glVertex2f(-0.67f, 0.69f);    //// x, y
+	glVertex2f(-0.7f, 0.69f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.66f, 0.64f);    //// x, y
+	glVertex2f(-0.63f, 0.64f);    //// x, y
+
+	glVertex2f(-0.63f, 0.69f);    //// x, y
+	glVertex2f(-0.66f, 0.69f);    //// x, y
+	glEnd();
+
+	////4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.7f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.58f, 0.4f);    //// x, y
+	glVertex2f(-0.48f, 0.4f);    //// x, y
+
+	glVertex2f(-0.48f, 0.5f);    //// x, y
+	glVertex2f(-0.58f, 0.5f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.48f, 0.4f);    //// x, y
+	glVertex2f(-0.47f, 0.4f);    //// x, y
+
+	glVertex2f(-0.47f, 0.48f);    //// x, y
+	glVertex2f(-0.48f, 0.5f);    //// x, y
+	glEnd();
+
+	////windows
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.56f, 0.43f);    //// x, y
+	glVertex2f(-0.53f, 0.43f);    //// x, y
+
+	glVertex2f(-0.53f, 0.48f);    //// x, y
+	glVertex2f(-0.56f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.52f, 0.43f);    //// x, y
+	glVertex2f(-0.49f, 0.43f);    //// x, y
+
+	glVertex2f(-0.49f, 0.48f);    //// x, y
+	glVertex2f(-0.52f, 0.48f);    //// x, y
+	glEnd();
+
+	////5
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.6f, 0.6f); //// sky-blue
+
+	glVertex2f(-0.45f, 0.4f);    //// x, y
+	glVertex2f(-0.35f, 0.4f);    //// x, y
+
+	glVertex2f(-0.35f, 0.72f);    //// x, y
+	glVertex2f(-0.45f, 0.72f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.3f, 0.3f); //// sky-blue
+
+	glVertex2f(-0.35f, 0.4f);   //// x, y
+	glVertex2f(-0.33f, 0.4f);    //// x, y
+
+	glVertex2f(-0.33f, 0.67f);    //// x, y
+	glVertex2f(-0.35f, 0.72f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.43f, 0.43f);    //// x, y
+	glVertex2f(-0.4f, 0.43f);    //// x, y
+
+	glVertex2f(-0.4f, 0.48f);    //// x, y
+	glVertex2f(-0.43f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.39f, 0.43f);    //// x, y
+	glVertex2f(-0.36f, 0.43f);    //// x, y
+
+	glVertex2f(-0.36f, 0.48f);    //// x, y
+	glVertex2f(-0.39f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.43f, 0.5f);    //// x, y
+	glVertex2f(-0.4f, 0.5f);    //// x, y
+
+	glVertex2f(-0.4f, 0.55f);    //// x, y
+	glVertex2f(-0.43f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.39f, 0.5f);    //// x, y
+	glVertex2f(-0.36f, 0.5f);    //// x, y
+
+	glVertex2f(-0.36f, 0.55f);    //// x, y
+	glVertex2f(-0.39f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.43f, 0.57f);    //// x, y
+	glVertex2f(-0.4f, 0.57f);    //// x, y
+
+	glVertex2f(-0.4f, 0.62f);    //// x, y
+	glVertex2f(-0.43f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.39f, 0.57f);    //// x, y
+	glVertex2f(-0.36f, 0.57f);    //// x, y
+
+	glVertex2f(-0.36f, 0.62f);    //// x, y
+	glVertex2f(-0.39f, 0.62f);    //// x, y
+	glEnd();
+    ////p4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.43f, 0.64f);    //// x, y
+	glVertex2f(-0.4f, 0.64f);    //// x, y
+
+	glVertex2f(-0.4f, 0.69f);    //// x, y
+	glVertex2f(-0.43f, 0.69f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.39f, 0.64f);    //// x, y
+	glVertex2f(-0.36f, 0.64f);    //// x, y
+
+	glVertex2f(-0.36f, 0.69f);    //// x, y
+	glVertex2f(-0.39f, 0.69f);    //// x, y
+	glEnd();
+
+	////6
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.0f, 0.3f); //// sky-blue
+
+	glVertex2f(-0.3f, 0.4f);    //// x, y
+	glVertex2f(-0.2f, 0.4f);    //// x, y
+
+	glVertex2f(-0.2f, 0.6f);    //// x, y
+	glVertex2f(-0.3f, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.2f); //// sky-blue
+
+	glVertex2f(-0.2f, 0.4f);    //// x, y
+	glVertex2f(-0.18f, 0.4f);    //// x, y
+
+	glVertex2f(-0.18f, 0.57f);    //// x, y
+	glVertex2f(-0.2f, 0.6f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.28f, 0.43f);    //// x, y
+	glVertex2f(-0.25f, 0.43f);    //// x, y
+
+	glVertex2f(-0.25f, 0.48f);    //// x, y
+	glVertex2f(-0.28f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.24f, 0.43f);    //// x, y
+	glVertex2f(-0.21f, 0.43f);    //// x, y
+
+	glVertex2f(-0.21f, 0.48f);    //// x, y
+	glVertex2f(-0.24f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.28f, 0.5f);    //// x, y
+	glVertex2f(-0.25f, 0.5f);    //// x, y
+
+	glVertex2f(-0.25f, 0.55f);    //// x, y
+	glVertex2f(-0.28f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.24f, 0.5f);    //// x, y
+	glVertex2f(-0.21f, 0.5f);    //// x, y
+
+	glVertex2f(-0.21f, 0.55f);    //// x, y
+	glVertex2f(-0.24f, 0.55f);    //// x, y
+	glEnd();
+
+	////7
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.9f, 0.9f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.17f, 0.4f);    //// x, y
+	glVertex2f(-0.07f, 0.4f);    //// x, y
+
+	glVertex2f(-0.07f, 0.65f);    //// x, y
+	glVertex2f(-0.17f, 0.65f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.7f, 0.7f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.07f, 0.4f);    //// x, y
+	glVertex2f(-0.06f, 0.4f);    //// x, y
+
+	glVertex2f(-0.06f, 0.62f);    //// x, y
+	glVertex2f(-0.07f, 0.65f);    //// x, y
+	glEnd();
+    ////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.16f, 0.43f);    //// x, y
+	glVertex2f(-0.13f, 0.43f);    //// x, y
+
+	glVertex2f(-0.13f, 0.48f);    //// x, y
+	glVertex2f(-0.16f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.12f, 0.43f);    //// x, y
+	glVertex2f(-0.09f, 0.43f);    //// x, y
+
+	glVertex2f(-0.09f, 0.48f);    //// x, y
+	glVertex2f(-0.12f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.16f, 0.5f);    //// x, y
+	glVertex2f(-0.13f, 0.5f);    //// x, y
+
+	glVertex2f(-0.13f, 0.55f);    //// x, y
+	glVertex2f(-0.16f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.12f, 0.5f);    //// x, y
+	glVertex2f(-0.09f, 0.5f);    //// x, y
+
+	glVertex2f(-0.09f, 0.55f);    //// x, y
+	glVertex2f(-0.12f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.16f, 0.57f);    //// x, y
+	glVertex2f(-0.13f, 0.57f);    //// x, y
+
+	glVertex2f(-0.13f, 0.62f);    //// x, y
+	glVertex2f(-0.16f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.12f, 0.57f);    //// x, y
+	glVertex2f(-0.09f, 0.57f);    //// x, y
+
+	glVertex2f(-0.09f, 0.62f);    //// x, y
+	glVertex2f(-0.12f, 0.62f);    //// x, y
+	glEnd();
+
+	////8
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.4f, 0.4f); //// sky-blue
+
+	glVertex2f(-0.04f, 0.4f);    //// x, y
+	glVertex2f(0.04f, 0.4f);    //// x, y
+
+	glVertex2f(0.04f, 0.71f);    //// x, y
+	glVertex2f(-0.04f, 0.71f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.1f, 0.1f); //// sky-blue
+
+	glVertex2f(0.04f, 0.4f);    //// x, y
+	glVertex2f(0.043f, 0.4f);    //// x, y
+
+	glVertex2f(0.043f, 0.65f);    //// x, y
+	glVertex2f(0.04f, 0.71f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.03f, 0.43f);    //// x, y
+	glVertex2f(-0.01f, 0.43f);    //// x, y
+
+	glVertex2f(-0.01f, 0.48f);    //// x, y
+	glVertex2f(-0.03f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.01f, 0.43f);    //// x, y
+	glVertex2f(0.03f, 0.43f);    //// x, y
+
+	glVertex2f(0.03f, 0.48f);    //// x, y
+	glVertex2f(0.01f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.03f, 0.5f);    //// x, y
+	glVertex2f(-0.01f, 0.5f);    //// x, y
+
+	glVertex2f(-0.01f, 0.55f);    //// x, y
+	glVertex2f(-0.03f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.01f, 0.5f);    //// x, y
+	glVertex2f(0.03f, 0.5f);    //// x, y
+
+	glVertex2f(0.03f, 0.55f);    //// x, y
+	glVertex2f(0.01f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.03f, 0.57f);    //// x, y
+	glVertex2f(-0.01f, 0.57f);    //// x, y
+
+	glVertex2f(-0.01f, 0.62f);    //// x, y
+	glVertex2f(-0.03f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.01f, 0.57f);    //// x, y
+	glVertex2f(0.03f, 0.57f);    //// x, y
+
+	glVertex2f(0.03f, 0.62f);    //// x, y
+	glVertex2f(0.01f, 0.62f);    //// x, y
+	glEnd();
+    ////p4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(-0.03f, 0.64f);    //// x, y
+	glVertex2f(-0.01f, 0.64f);    //// x, y
+
+	glVertex2f(-0.01f, 0.69f);    //// x, y
+	glVertex2f(-0.03f, 0.69f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.01f, 0.64f);    //// x, y
+	glVertex2f(0.03f, 0.64f);    //// x, y
+
+	glVertex2f(0.03f, 0.69f);    //// x, y
+	glVertex2f(0.01f, 0.69f);    //// x, y
+	glEnd();
+
+	////9
+    glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.08f, 0.4f);    //// x, y
+	glVertex2f(0.18f, 0.4f);    //// x, y
+
+	glVertex2f(0.18f, 0.6f);    //// x, y
+	glVertex2f(0.08f, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.4f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.07f, 0.4f);    //// x, y
+	glVertex2f(0.08f, 0.4f);    //// x, y
+
+	glVertex2f(0.08f, 0.6f);    //// x, y
+	glVertex2f(0.07f, 0.55f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.09f, 0.43f);    //// x, y
+	glVertex2f(0.12f, 0.43f);    //// x, y
+
+	glVertex2f(0.12f, 0.48f);    //// x, y
+	glVertex2f(0.09f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.13f, 0.43f);    //// x, y
+	glVertex2f(0.16f, 0.43f);    //// x, y
+
+	glVertex2f(0.16f, 0.48f);    //// x, y
+	glVertex2f(0.13f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.09f, 0.5f);    //// x, y
+	glVertex2f(0.12f, 0.5f);    //// x, y
+
+	glVertex2f(0.12f, 0.55f);    //// x, y
+	glVertex2f(0.09f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.13f, 0.5f);    //// x, y
+	glVertex2f(0.16f, 0.5f);    //// x, y
+
+	glVertex2f(0.16f, 0.55f);    //// x, y
+	glVertex2f(0.13f, 0.55f);    //// x, y
+	glEnd();
+
+		////10
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.7f, 0.7f, 0.7f); //// sky-blue
+
+	glVertex2f(0.22f, 0.4f);    //// x, y
+	glVertex2f(0.32f, 0.4f);    //// x, y
+
+	glVertex2f(0.32f, 0.65f);    //// x, y
+	glVertex2f(0.22f, 0.65f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.5f, 0.5f); //// sky-blue
+
+	glVertex2f(0.2f, 0.4f);    //// x, y
+	glVertex2f(0.22f, 0.4f);    //// x, y
+
+	glVertex2f(0.22f, 0.65f);    //// x, y
+	glVertex2f(0.2f, 0.62f);    //// x, y
+	glEnd();
+    ////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.24f, 0.43f);    //// x, y
+	glVertex2f(0.27f, 0.43f);    //// x, y
+
+	glVertex2f(0.27f, 0.48f);    //// x, y
+	glVertex2f(0.24f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.28f, 0.43f);    //// x, y
+	glVertex2f(0.31f, 0.43f);    //// x, y
+
+	glVertex2f(0.31f, 0.48f);    //// x, y
+	glVertex2f(0.28f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.24f, 0.5f);    //// x, y
+	glVertex2f(0.27f, 0.5f);    //// x, y
+
+	glVertex2f(0.27f, 0.55f);    //// x, y
+	glVertex2f(0.24f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.28f, 0.5f);    //// x, y
+	glVertex2f(0.31f, 0.5f);    //// x, y
+
+	glVertex2f(0.31f, 0.55f);    //// x, y
+	glVertex2f(0.28f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.24f, 0.57f);    //// x, y
+	glVertex2f(0.27f, 0.57f);    //// x, y
+
+	glVertex2f(0.27f, 0.62f);    //// x, y
+	glVertex2f(0.24f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.28f, 0.57f);    //// x, y
+	glVertex2f(0.31f, 0.57f);    //// x, y
+
+	glVertex2f(0.31f, 0.62f);    //// x, y
+	glVertex2f(0.28f, 0.62f);    //// x, y
+	glEnd();
+
+    ////11
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.0f, 0.6f); //// sky-blue
+
+	glVertex2f(0.34f, 0.4f);    //// x, y
+	glVertex2f(0.44f, 0.4f);    //// x, y
+
+	glVertex2f(0.44f, 0.72f);    //// x, y
+	glVertex2f(0.34f, 0.72f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.0f, 0.3f); //// sky-blue
+
+	glVertex2f(0.33f, 0.4f);   //// x, y
+	glVertex2f(0.34f, 0.4f);    //// x, y
+
+	glVertex2f(0.34f, 0.72f);    //// x, y
+	glVertex2f(0.33f, 0.7f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.35f, 0.43f);    //// x, y
+	glVertex2f(0.38f, 0.43f);    //// x, y
+
+	glVertex2f(0.38f, 0.48f);    //// x, y
+	glVertex2f(0.35f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.4f, 0.43f);    //// x, y
+	glVertex2f(0.43f, 0.43f);    //// x, y
+
+	glVertex2f(0.43f, 0.48f);    //// x, y
+	glVertex2f(0.4f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.35f, 0.5f);    //// x, y
+	glVertex2f(0.38f, 0.5f);    //// x, y
+
+	glVertex2f(0.38f, 0.55f);    //// x, y
+	glVertex2f(0.35f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.4f, 0.5f);    //// x, y
+	glVertex2f(0.43f, 0.5f);    //// x, y
+
+	glVertex2f(0.43f, 0.55f);    //// x, y
+	glVertex2f(0.4f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.35f, 0.57f);    //// x, y
+	glVertex2f(0.38f, 0.57f);    //// x, y
+
+	glVertex2f(0.38f, 0.62f);    //// x, y
+	glVertex2f(0.35f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.4f, 0.57f);    //// x, y
+	glVertex2f(0.43f, 0.57f);    //// x, y
+
+	glVertex2f(0.43f, 0.62f);    //// x, y
+	glVertex2f(0.4f, 0.62f);    //// x, y
+	glEnd();
+    ////p4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.35f, 0.64f);    //// x, y
+	glVertex2f(0.38f, 0.64f);    //// x, y
+
+	glVertex2f(0.38f, 0.69f);    //// x, y
+	glVertex2f(0.35f, 0.69f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.4f, 0.64f);    //// x, y
+	glVertex2f(0.43f, 0.64f);    //// x, y
+
+	glVertex2f(0.43f, 0.69f);    //// x, y
+	glVertex2f(0.4f, 0.69f);    //// x, y
+	glEnd();
+
+	////12
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.9f, 0.9f, 0.0f); //// sky-blue
+
+	glVertex2f(0.47f, 0.4f);    //// x, y
+	glVertex2f(0.57f, 0.4f);    //// x, y
+
+	glVertex2f(0.57f, 0.6f);    //// x, y
+	glVertex2f(0.47f, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.5f, 0.0f); //// sky-blue
+
+	glVertex2f(0.46f, 0.4f);    //// x, y
+	glVertex2f(0.47f, 0.4f);    //// x, y
+
+	glVertex2f(0.47f, 0.6f);    //// x, y
+	glVertex2f(0.46f, 0.57f);    //// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.49f, 0.47f);    //// x, y
+	glVertex2f(0.52f, 0.47f);    //// x, y
+
+	glVertex2f(0.52f, 0.54f);    //// x, y
+	glVertex2f(0.49f, 0.54f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.53f, 0.47f);    //// x, y
+	glVertex2f(0.56f, 0.47f);    //// x, y
+
+	glVertex2f(0.56f, 0.54f);    //// x, y
+	glVertex2f(0.53f, 0.54f);    //// x, y
+	glEnd();
+
+	////13
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.7f, 0.7f); //// sky-blue
+
+	glVertex2f(0.6f, 0.4f);    //// x, y
+	glVertex2f(0.7f, 0.4f);    //// x, y
+
+	glVertex2f(0.7f, 0.65f);    //// x, y
+	glVertex2f(0.6f, 0.65f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.5f, 0.5f); //// sky-blue
+
+	glVertex2f(0.58f, 0.4f);    //// x, y
+	glVertex2f(0.6f, 0.4f);    //// x, y
+
+	glVertex2f(0.6f, 0.65f);    //// x, y
+	glVertex2f(0.58f, 0.62f);    //// x, y
+	glEnd();
+    ////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.61f, 0.43f);    //// x, y
+	glVertex2f(0.64f, 0.43f);    //// x, y
+
+	glVertex2f(0.64f, 0.48f);    //// x, y
+	glVertex2f(0.61f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.66f, 0.43f);    //// x, y
+	glVertex2f(0.69f, 0.43f);    //// x, y
+
+	glVertex2f(0.69f, 0.48f);    //// x, y
+	glVertex2f(0.66f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.61f, 0.5f);    //// x, y
+	glVertex2f(0.64f, 0.5f);    //// x, y
+
+	glVertex2f(0.64f, 0.55f);    //// x, y
+	glVertex2f(0.61f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.66f, 0.5f);    //// x, y
+	glVertex2f(0.69f, 0.5f);    //// x, y
+
+	glVertex2f(0.69f, 0.55f);    //// x, y
+	glVertex2f(0.66f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.61f, 0.57f);    //// x, y
+	glVertex2f(0.64f, 0.57f);    //// x, y
+
+	glVertex2f(0.64f, 0.62f);    //// x, y
+	glVertex2f(0.61f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.66f, 0.57f);    //// x, y
+	glVertex2f(0.69f, 0.57f);    //// x, y
+
+	glVertex2f(0.69f, 0.62f);    //// x, y
+	glVertex2f(0.66f, 0.62f);    //// x, y
+	glEnd();
+
+	////14
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.74f, 0.4f);    //// x, y
+	glVertex2f(0.84f, 0.4f);    //// x, y
+
+	glVertex2f(0.84f, 0.72f);    //// x, y
+	glVertex2f(0.74f, 0.72f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.72f, 0.4f);   //// x, y
+	glVertex2f(0.74f, 0.4f);    //// x, y
+
+	glVertex2f(0.74f, 0.72f);    //// x, y
+	glVertex2f(0.72f, 0.7f);    //// x, y
+	glEnd();
+
+	////windows
+	////p1
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.76f, 0.43f);    //// x, y
+	glVertex2f(0.79f, 0.43f);    //// x, y
+
+	glVertex2f(0.79f, 0.48f);    //// x, y
+	glVertex2f(0.76f, 0.48f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.8f, 0.43f);    //// x, y
+	glVertex2f(0.83f, 0.43f);    //// x, y
+
+	glVertex2f(0.83f, 0.48f);    //// x, y
+	glVertex2f(0.8f, 0.48f);    //// x, y
+	glEnd();
+	////p2
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.76f, 0.5f);    //// x, y
+	glVertex2f(0.79f, 0.5f);    //// x, y
+
+	glVertex2f(0.79f, 0.55f);    //// x, y
+	glVertex2f(0.76f, 0.55f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.8f, 0.5f);    //// x, y
+	glVertex2f(0.83f, 0.5f);    //// x, y
+
+	glVertex2f(0.83f, 0.55f);    //// x, y
+	glVertex2f(0.8f, 0.55f);    //// x, y
+	glEnd();
+	////p3
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.76f, 0.57f);    //// x, y
+	glVertex2f(0.79f, 0.57f);    //// x, y
+
+	glVertex2f(0.79f, 0.62f);    //// x, y
+	glVertex2f(0.76f, 0.62f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.8f, 0.57f);    //// x, y
+	glVertex2f(0.83f, 0.57f);    //// x, y
+
+	glVertex2f(0.83f, 0.62f);    //// x, y
+	glVertex2f(0.8f, 0.62f);    //// x, y
+	glEnd();
+    ////p4
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.76f, 0.64f);    //// x, y
+	glVertex2f(0.79f, 0.64f);    //// x, y
+
+	glVertex2f(0.79f, 0.69f);    //// x, y
+	glVertex2f(0.76f, 0.69f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.8f, 0.64f);    //// x, y
+	glVertex2f(0.83f, 0.64f);    //// x, y
+
+	glVertex2f(0.83f, 0.69f);    //// x, y
+	glVertex2f(0.8f, 0.69f);    //// x, y
+	glEnd();
+
+	////15
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.5f, 0.2f); //// sky-blue
+
+	glVertex2f(1.0f, 0.4f);    //// x, y
+	glVertex2f(0.91f, 0.4f);    //// x, y
+
+	glVertex2f(0.91f, 0.6f);    //// x, y
+	glVertex2f(1.0f, 0.6f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.4f, 0.2f); //// sky-blue
+
+	glVertex2f(0.91f, 0.4f);    //// x, y
+	glVertex2f(0.89f, 0.4f);    //// x, y
+
+	glVertex2f(0.89f, 0.57f);    //// x, y
+	glVertex2f(0.91f, 0.6f);    //// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(1.0f, 0.47f);    //// x, y
+	glVertex2f(0.97f, 0.47f);    //// x, y
+
+	glVertex2f(0.97f, 0.52f);    //// x, y
+	glVertex2f(1.0f, 0.52f);    //// x, y
+	glEnd();
+	glBegin(GL_QUADS);              //// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); //// sky-blue
+
+	glVertex2f(0.96f, 0.47f);    //// x, y
+	glVertex2f(0.93f, 0.47f);    //// x, y
+
+	glVertex2f(0.93f, 0.52f);    //// x, y
+	glVertex2f(0.96f, 0.52f);    //// x, y
+	glEnd();
+
+	///plane
+
+	plane();
+
+
+}
+
+
+void WalkWay()
+{
+    //walkingWay
+
+
+    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+    glColor3f(0.4f, 0.0f, 0.3f); // Red
+
+    glVertex2f(-1.0f, -0.3f);    // x, y
+    glVertex2f(1.0f, -0.3f);    // x, y
+
+    glVertex2f(1.0f, -0.1f);    // x, y
+    glVertex2f(-1.0f, -0.1f);    // x, y
+    glEnd();
+
+
+}
+
+void lampPost1(){
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(0.0f, 0.1f);    // x, y
+    glVertex2f(0.025f, 0.1f);    // x, y
+    glVertex2f(0.025f, -0.25f);    // x, y
+    glVertex2f(0.0f, -0.25f);    // x, y
+    glEnd();
+
+
+     //----BigLight-----
+
+    int jeight;
+    GLfloat p20=0.0125f;
+    GLfloat q20=0.1f;
+    GLfloat radius8 =.075f;
+    int triangleAmount8 = 20; //# of triangles used to draw circle
+
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi20 = 2.0f * PI;
+
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(0.90f, 1.0f, 0.3f);
+    glVertex2f(p20, q20); // center of circle
+    for(jeight = 0; jeight <= triangleAmount8; jeight++)
+    {
+        glVertex2f(
+            p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+            q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+        );
+    }
+    glEnd();
+
+    //--------------{-;-}-------------------
+
+    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(-0.20f, 0.0f);    // x, y
+    glVertex2f(0.20f, 0.0f);    // x, y
+    glVertex2f(0.20f, -0.025f);    // x, y
+    glVertex2f(-0.20f, -0.025f);    // x, y
+    glEnd();
+
+///////--------small light1-----------
+
+    glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+    glVertex2f(-0.19f, 0.00f);    // x, y
+    glVertex2f(-0.19f, 0.05f);    // x, y
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glVertex2f(-0.25f,  0.05f);
+    glVertex2f(-0.19f, 0.20f);
+    glVertex2f(-0.13f, 0.05f);
+
+    glEnd();
+
+
+    ///////--------small light1-----------
+
+    glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+    glVertex2f(0.19f, 0.00f);    // x, y
+    glVertex2f(0.19f, 0.05f);    // x, y
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glVertex2f(0.25f,  0.05f);
+    glVertex2f(0.19f, 0.20f);
+    glVertex2f(0.13f, 0.05f);
+
+    glEnd();
+}
+
+void lampPost2(){
+glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(0.9f, 0.1f);    // x, y
+    glVertex2f(0.925f, 0.1f);    // x, y
+    glVertex2f(0.925f, -0.25f);    // x, y
+    glVertex2f(0.9f, -0.25f);    // x, y
+    glEnd();
+
+
+     //----BigLight-----
+
+    int jeight;
+    GLfloat p20=0.9125f;
+    GLfloat q20=0.1f;
+    GLfloat radius8 =.075f;
+    int triangleAmount8 = 20; //# of triangles used to draw circle
+
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi20 = 2.0f * PI;
+
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(0.90f, 1.0f, 0.3f);
+    glVertex2f(p20, q20); // center of circle
+    for(jeight = 0; jeight <= triangleAmount8; jeight++)
+    {
+        glVertex2f(
+            p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+            q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+        );
+    }
+    glEnd();
+
+    //--------------{-;-}-------------------
+
+    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(1.0f, 0.0f);    // x, y
+    glVertex2f(0.75f, 0.0f);    // x, y
+    glVertex2f(0.75f, -0.025f);    // x, y
+    glVertex2f(1.0f, -0.025f);    // x, y
+    glEnd();
+
+///////--------small light-----------
+
+    glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+    glVertex2f(0.75f, 0.00f);    // x, y
+    glVertex2f(0.75f, 0.05f);    // x, y
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glVertex2f(0.69f,  0.05f);
+    glVertex2f(0.75f, 0.20f);
+    glVertex2f(0.81f, 0.05f);
+
+    glEnd();
+
+}
+
+void LampPost3(){
+glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(-0.9f, 0.1f);    // x, y
+    glVertex2f(-0.925f, 0.1f);    // x, y
+    glVertex2f(-0.925f, -0.25f);    // x, y
+    glVertex2f(-0.9f, -0.25f);    // x, y
+    glEnd();
+
+
+     //----BigLight-----
+
+    int jeight;
+    GLfloat p20=-0.9125f;
+    GLfloat q20=0.1f;
+    GLfloat radius8 =0.075f;
+    int triangleAmount8 = 20; //# of triangles used to draw circle
+
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi20 = 2.0f * PI;
+
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(0.90f, 1.0f, 0.3f);
+    glVertex2f(p20, q20); // center of circle
+    for(jeight = 0; jeight <= triangleAmount8; jeight++)
+    {
+        glVertex2f(
+            p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+            q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+        );
+    }
+    glEnd();
+
+    //--------------{-;-}-------------------
+
+    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+    glVertex2f(-1.0f, 0.0f);    // x, y
+    glVertex2f(-0.75f, 0.0f);    // x, y
+    glVertex2f(-0.75f, -0.025f);    // x, y
+    glVertex2f(-1.0f, -0.025f);    // x, y
+    glEnd();
+
+///////--------small light-----------
+
+    glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+    glColor3f(0.0f, 0.0f, 0.0f); // Red
+    glVertex2f(-0.75f, 0.00f);    // x, y
+    glVertex2f(-0.75f, 0.05f);    // x, y
+
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glVertex2f(-0.69f,  0.05f);
+    glVertex2f(-0.75f, 0.20f);
+    glVertex2f(-0.81f, 0.05f);
+
+    glEnd();
+}
+
+void road(){
+   //--------------------Road for Car---------------------
+
+glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.2f, 0.2f, 0.2f); // Red
+
+glVertex2f(-1.0f, -1.0f);    // x, y
+glVertex2f(1.0f, -1.0f);    // x, y
+glVertex2f(1.0f, -0.35f);    // x, y
+glVertex2f(-1.0f, -0.35f);    // x, y
+glEnd();
+
+
+//-------------road white-black side(black)----------------
+
+glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+
+glVertex2f(-1.0f, -0.35f);    // x, y
+glVertex2f(1.0f, -0.35f);    // x, y
+glVertex2f(1.0f, -0.3f);    // x, y
+glVertex2f(-1.0f, -0.3f);    // x, y
+glEnd();
+
+///////////-------------road white-black side(white)----------------////////
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-1.0f, -0.35f);    // x, y
+glVertex2f(-0.80f, -0.35f);    // x, y
+glVertex2f(-0.80f, -0.3f);    // x, y
+glVertex2f(-1.0f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-0.60f, -0.35f);    // x, y
+glVertex2f(-0.40f, -0.35f);    // x, y
+glVertex2f(-0.40f, -0.3f);    // x, y
+glVertex2f(-0.60f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(-0.20f, -0.35f);    // x, y
+glVertex2f(0.00f, -0.35f);    // x, y
+glVertex2f(0.00f, -0.3f);    // x, y
+glVertex2f(-0.20f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(0.20f, -0.35f);    // x, y
+glVertex2f(0.40f, -0.35f);    // x, y
+glVertex2f(0.40f, -0.3f);    // x, y
+glVertex2f(0.20f, -0.3f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(1.0f, 1.0f, 1.0f); // Red
+
+glVertex2f(0.60f, -0.35f);    // x, y
+glVertex2f(0.80f, -0.35f);    // x, y
+glVertex2f(0.80f, -0.3f);    // x, y
+glVertex2f(0.60f, -0.3f);    // x, y
+glEnd();
+
+
+
+//------------------road yellow line-----------
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-1.0f, -0.67f);    // x, y
+glVertex2f(-0.80f, -0.67f);    // x, y
+glVertex2f(-0.80f, -0.7f);    // x, y
+glVertex2f(-1.0f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-0.60f, -0.67f);    // x, y
+glVertex2f(-0.40f, -0.67f);    // x, y
+glVertex2f(-0.40f, -0.7f);    // x, y
+glVertex2f(-0.60f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(-0.20f, -0.67f);    // x, y
+glVertex2f(0.00f, -0.67f);    // x, y
+glVertex2f(0.00f, -0.7f);    // x, y
+glVertex2f(-0.20f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(0.20f, -0.67f);    // x, y
+glVertex2f(0.40f, -0.67f);    // x, y
+glVertex2f(0.40f, -0.7f);    // x, y
+glVertex2f(0.20f, -0.7f);    // x, y
+glEnd();
+
+   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+glColor3f(0.90f, 1.0f, 0.3f); // Red
+
+glVertex2f(0.60f, -0.67f);    // x, y
+glVertex2f(0.80f, -0.67f);    // x, y
+glVertex2f(0.80f, -0.7f);    // x, y
+glVertex2f(0.60f, -0.7f);    // x, y
+glEnd();
+
+
+}
+
+
+void car1(){
+//------------car1-----------------------------
+
+   glPushMatrix();
+   glTranslatef(-car1position,0.0f, 0.0f);
+   //car-1
+   glBegin(GL_QUADS);
+   glColor3f(0.9f,0.9f,1.0f);
+   glVertex2f(0.45f, -0.85f);
+glVertex2f(0.5f, -0.75f);
+glVertex2f(0.6f, -0.75f);
+glVertex2f(0.65f, -0.85f);
+
+glEnd();
+
+
+   glBegin(GL_QUADS);
+   glColor3f(0.9f,0.8f,1.0f);
+   glVertex2f(0.4f, -0.95f);
+glVertex2f(0.4f, -0.85f);
+glVertex2f(0.7f, -0.85f);
+glVertex2f(0.7f, -0.95f);
+
+glEnd();
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+glVertex2f(0.45f, -0.85f);    // x, y
+glVertex2f(0.65f, -0.85f);    // x, y
+
+glEnd();
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(0.0f, 0.0f, 0.0f); // Red
+glVertex2f(0.55f, -0.85f);    // x, y
+glVertex2f(0.55f, -0.75f);    // x, y
+
+glEnd();
+          //----wheel1-----
+
+   int jeight;
+   GLfloat p20=.65f;
+   GLfloat q20=-0.95f;
+   GLfloat radius8 =.03f;
+   int triangleAmount8 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi20 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p20, q20); // center of circle
+   for(jeight = 0; jeight <= triangleAmount8; jeight++)
+   {
+       glVertex2f(
+           p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+           q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+       );
+   }
+   glEnd();
+
+    //----wheel2-----
+   int height;
+   GLfloat p21=0.45f;
+   GLfloat q21=-0.95f;
+   GLfloat radius6 =.03f;
+   int triangleAmount21 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi21 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p21, q21); // center of circle
+   for(height = 0; height <= triangleAmount21; height++)
+   {
+       glVertex2f(
+           p21 + (radius6 * cos(height *  twicePi21 / triangleAmount21)),
+           q21 + (radius6 * sin(height * twicePi21 / triangleAmount21))
+       );
+   }
+   glEnd();
+   glPopMatrix();
+
+
+}
+
+void car2(){
+
+   glPushMatrix();
+   glTranslatef(car2position,0.0f, 0.0f);
+
+   glBegin(GL_QUADS);
+   glColor3f(1.0f,1.0f,1.0f);
+   glVertex2f(-0.45f, -0.5f);
+glVertex2f(-0.5f, -0.4f);
+glVertex2f(-0.6f, -0.4f);
+glVertex2f(-0.65f, -0.5f);
+
+glEnd();
+
+   glBegin(GL_QUADS);
+   glColor3f(1.0f,0.0f,0.0f);
+   glVertex2f(-0.4f, -0.6f);
+glVertex2f(-0.4f, -0.5f);
+glVertex2f(-0.7f, -0.5f);
+glVertex2f(-0.7f, -0.6f);
+
+glEnd();
+
+
+   glBegin(GL_LINES);              // Each set of 4 vertices form a quad
+glColor3f(1.0f,0.0f,0.0f); // Red
+glVertex2f(-0.55f, -0.5f);    // x, y
+glVertex2f(-0.55f, -0.4f);    // x, y
+
+glEnd();
+          //----wheel1-----
+
+   int jeight;
+   GLfloat p20=-0.65f;
+   GLfloat q20=-0.6f;
+   GLfloat radius8 =.03f;
+   int triangleAmount8 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi20 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p20, q20); // center of circle
+   for(jeight = 0; jeight <= triangleAmount8; jeight++)
+   {
+       glVertex2f(
+           p20 + (radius8 * cos(jeight *  twicePi20 / triangleAmount8)),
+           q20 + (radius8 * sin(jeight * twicePi20 / triangleAmount8))
+       );
+   }
+   glEnd();
+
+    //----wheel2-----
+   int height;
+   GLfloat p21=-0.45f;
+   GLfloat q21=-0.6f;
+   GLfloat radius6 =.03f;
+   int triangleAmount21 = 20; //# of triangles used to draw circle
+
+   //GLfloat radius = 0.8f; //radius
+   GLfloat twicePi21 = 2.0f * PI;
+
+   glBegin(GL_TRIANGLE_FAN);
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glVertex2f(p21, q21); // center of circle
+   for(height = 0; height <= triangleAmount21; height++)
+   {
+       glVertex2f(
+           p21 + (radius6 * cos(height *  twicePi21 / triangleAmount21)),
+           q21 + (radius6 * sin(height * twicePi21 / triangleAmount21))
+       );
+   }
+   glEnd();
+glPopMatrix();
+}
+void display()
+{
+    SKY_Background();
+    river();
+    WalkWay();
+    //lampPost1();
+    //lampPost2();
+    //LampPost3();
+
+    road();
+    car1();
+    car2();
+   ///policeCar();
+   human(1,0,1,0.3,0);
+   human(0,1,1,-0.4,0);
+   human(1,0.5,0.5,0.8,0);
+   human(0.5,0.2,0.6,0.9,0);
+
+
+
+   allLampPost();
+
+	glFlush();  //// Render now
+}
+
+
+
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);                 //// Initialize GLUT
+	glutCreateWindow("OpenGL Setup"); //// Create a window with the given title
+	glutInitWindowSize(320, 320);   //// Set the window's initial width & height
+	glutDisplayFunc(display); //// Register display callback handler for window re-paint
+	glutTimerFunc(100, update, 0);
+	glutMainLoop();           //// Enter the event-processing loop
+	return 0;
+}

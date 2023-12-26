@@ -1,0 +1,498 @@
+#include<cstdio>
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include<math.h>
+#define PI          3.141516
+
+
+GLfloat ship_position = 0.0f;
+GLfloat ship_speed = 0.01f;
+
+float boat_position = 0.0f;
+float boat_speed = 0.001f;
+
+
+
+float planePosition=0;
+float planeSpeed=0.025;
+
+
+int covidPhase=1;
+    ///pahse 1 is before covid
+    ///phase 2 is during covid
+    ///phase 3 is after covid
+
+
+void update(int value)
+{
+    planePosition-=planeSpeed;
+    if(planePosition<-1.0)
+    {
+        planePosition=1.0;
+    }
+
+
+    if (ship_position>=1)
+    {
+        ship_position=-1;
+    }
+    ship_position+=ship_speed;
+
+
+    boat_position -= boat_speed;
+    if(boat_position <-1.0)
+        boat_position = 1.0f;
+
+
+
+glutPostRedisplay();
+glutTimerFunc(100, update, 0);
+}
+
+
+
+
+void ship()
+{
+    /// ship
+
+	glPushMatrix();
+    glTranslatef(ship_position,-0.15,0);
+
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.3f, 0.2f, 0.3f); /// blue
+
+	glVertex2f(-0.2f, 0.31f);    /// x, y
+	glVertex2f(-0.88f, 0.31f);    /// x, y
+
+	glVertex2f(-0.88f, 0.1f);    /// x, y
+	glVertex2f(-0.3f, 0.1f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);/// ship up              /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.5f, 0.0f); /// blue
+
+	glVertex2f(-0.37f, 0.42f);    /// x, y
+	glVertex2f(-0.85f, 0.42f);    /// x, y
+
+	glVertex2f(-0.85f, 0.31f);    /// x, y
+	glVertex2f(-0.3f, 0.31f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);/// ship up 3             /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.3f, 0.5f); /// blue
+
+	glVertex2f(-0.45f, 0.53f);    /// x, y
+	glVertex2f(-0.8f, 0.53f);    /// x, y
+
+	glVertex2f(-0.8f, 0.42f);    /// x, y
+	glVertex2f(-0.39f, 0.42f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);/// ship up 4            /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.3f, 0.0f); /// blue
+
+	glVertex2f(-0.55f, 0.62f);    /// x, y
+	glVertex2f(-0.75f, 0.62f);    /// x, y
+
+	glVertex2f(-0.75f, 0.53f);    /// x, y
+	glVertex2f(-0.5f, 0.53f);    /// x, y
+	glEnd();
+
+
+
+	glBegin(GL_QUADS);  ///w1            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.74f, 0.4f);    /// x, y
+	glVertex2f(-0.8f, 0.4f);    /// x, y
+
+	glVertex2f(-0.8f, 0.33f);    /// x, y
+	glVertex2f(-0.74f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w2            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.62f, 0.4f);    /// x, y
+	glVertex2f(-0.68f, 0.4f);    /// x, y
+
+	glVertex2f(-0.68f, 0.33f);    /// x, y
+	glVertex2f(-0.62f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w3            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.5f, 0.4f);    /// x, y
+	glVertex2f(-0.56f, 0.4f);    /// x, y
+
+	glVertex2f(-0.56f, 0.33f);    /// x, y
+	glVertex2f(-0.5f, 0.33f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///w4            /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 1.0f, 1.0f); /// blue
+
+	glVertex2f(-0.39f, 0.4f);    /// x, y
+	glVertex2f(-0.45f, 0.4f);    /// x, y
+
+	glVertex2f(-0.45f, 0.33f);    /// x, y
+	glVertex2f(-0.39f, 0.33f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);  ///bw1            /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.68f, 0.51f);    /// x, y
+	glVertex2f(-0.75f, 0.51f);    /// x, y
+
+	glVertex2f(-0.75f, 0.43f);    /// x, y
+	glVertex2f(-0.68f, 0.43f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///bw2           /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.63f, 0.51f);    /// x, y
+	glVertex2f(-0.56f, 0.51f);    /// x, y
+
+	glVertex2f(-0.56f, 0.43f);    /// x, y
+	glVertex2f(-0.63f, 0.43f);    /// x, y
+	glEnd();
+
+
+	glBegin(GL_QUADS);  ///bw3           /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.51f, 0.51f);    /// x, y
+	glVertex2f(-0.45f, 0.51f);    /// x, y
+
+	glVertex2f(-0.45f, 0.43f);    /// x, y
+	glVertex2f(-0.51f, 0.43f);    /// x, y
+	glEnd();
+
+
+    glBegin(GL_QUADS);  ///lbw1            /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.6f, 0.61f);    /// x, y
+	glVertex2f(-0.68f, 0.61f);    /// x, y
+
+	glVertex2f(-0.68f, 0.54f);    /// x, y
+	glVertex2f(-0.6f, 0.54f);    /// x, y
+	glEnd();
+
+
+    glPopMatrix();
+	///ship end
+}
+void boat()
+{
+    ///boat
+
+	glPushMatrix();
+    glTranslatef(boat_position,0,0);
+
+	glBegin(GL_QUADS);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.2f, 0.3f);    /// x, y
+	glVertex2f(0.6f, 0.3f);    /// x, y
+
+	glVertex2f(0.5f, 0.17f);    /// x, y
+	glVertex2f(0.3f, 0.17f);    /// x, y
+	glEnd();
+
+	glBegin(GL_QUADS);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 1.0f); /// blue
+
+	glVertex2f(0.25f, 0.35f);    /// x, y
+	glVertex2f(0.45, 0.35f);    /// x, y
+
+	glVertex2f(0.45f, 0.3f);    /// x, y
+	glVertex2f(0.25f, 0.3f);    /// x, y
+	glEnd();
+
+	glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.33f,0.35f);
+   glVertex2f(0.33f, 0.3f);
+   glEnd();
+
+   glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.35f,0.35f);
+   glVertex2f(0.35f, 0.3f);
+   glEnd();
+
+   glBegin(GL_LINES);///boat
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glVertex2f(0.4f,0.35f);
+   glVertex2f(0.4f, 0.3f);
+   glEnd();
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.33f, 0.58f);    /// x, y
+	glVertex2f(0.21f, 0.33f);    /// x, y
+	glVertex2f(0.33f, 0.35f);
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.35f, 0.58f);    /// x, y
+	glVertex2f(0.45f, 0.33f);    /// x, y
+	glVertex2f(0.35f, 0.35f);
+
+	glBegin(GL_TRIANGLES);  ///boat           /// Each set of 4 vertices form a quad
+	glColor3f(1.0f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(0.4f, 0.55f);    /// x, y
+	glVertex2f(0.5f, 0.33f);    /// x, y
+	glVertex2f(0.4f, 0.35f);
+
+	glEnd();
+    glPopMatrix();
+}
+void plane()
+{
+
+
+    glPushMatrix();
+    glScalef(0.5, 0.5,1);;
+    glTranslatef(0, 0.8, 0);
+
+    glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.5f, 0.5f, 0.5f); /// Red
+
+	glVertex2f(-0.5f, 0.9f);    /// x, y
+	glVertex2f(-0.18f, 0.9f);    /// x, y
+	glVertex2f(-0.05f, 0.75f);    /// x, y
+	glVertex2f(-0.58f, 0.75f);
+	glEnd();
+
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.0f, 0.0f); /// Red
+
+	glVertex2f(-0.47f, 0.85f);    /// x, y
+	glVertex2f(-0.4f, 0.85f);    /// x, y
+	glVertex2f(-0.4f, 0.8f);    /// x, y
+	glVertex2f(-0.47f, 0.8f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.2f, 0.87f);    /// x, y
+	glVertex2f(-0.32f, 0.9f);    /// x, y
+	glVertex2f(-0.15f, 0.98f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.35f, 0.76f);    /// x, y
+	glVertex2f(-0.25f, 0.78f);    /// x, y
+	glVertex2f(-0.18f, 0.6f);
+
+	glEnd();
+
+		glBegin(GL_TRIANGLES);             /// Each set of 4 vertices form a quad
+	glColor3f(0.8f, 0.0f, 0.0f); /// blue
+
+	glVertex2f(-0.1f, 0.75f);    /// x, y
+	glVertex2f(-0.15f, 0.82f);    /// x, y
+	glVertex2f(-0.02f, 0.8f);
+
+	glEnd();
+	glPopMatrix();
+}
+void Tree()
+{
+     //tree
+
+	glBegin(GL_QUADS);  /// tree 1            // Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.3f, 0.0f); // Red
+
+	glVertex2f(-0.95f, 0.36f);    // x, y
+	glVertex2f(-1.0f, 0.36f);    // x, y
+
+	glVertex2f(-1.0f, -0.25f);    // x, y
+	glVertex2f(-0.95f, -0.25f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(-1.0f, 0.7f);    // x, y
+	glVertex2f(-1.0f, 0.36f);    // x, y
+	glVertex2f(-0.8f, 0.36f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(-1.0f, 0.85f);    // x, y
+	glVertex2f(-1.0f, 0.6f);    // x, y
+	glVertex2f(-0.85f, 0.6f);
+
+	glEnd();
+
+
+	glBegin(GL_QUADS);  /// tree 2           // Each set of 4 vertices form a quad
+	glColor3f(0.6f, 0.3f, 0.0f); // Red
+
+	glVertex2f(0.95f, 0.36f);    // x, y
+	glVertex2f(1.0f, 0.36f);    // x, y
+
+	glVertex2f(1.0f, -0.25f);    // x, y
+	glVertex2f(0.95f, -0.25f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);           // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(1.0f, 0.7f);    // x, y
+	glVertex2f(1.0f, 0.36f);    // x, y
+	glVertex2f(0.8f, 0.36f);
+
+	glEnd();
+
+	glBegin(GL_TRIANGLES);             // Each set of 4 vertices form a quad
+	glColor3f(0.0f, 1.0f, 0.0f); // blue
+
+	glVertex2f(1.0f, 0.85f);    // x, y
+	glVertex2f(1.0f, 0.6f);    // x, y
+	glVertex2f(0.85f, 0.6f);
+
+	glEnd();
+
+
+
+
+}
+
+void river()
+{
+
+
+
+	///river
+	glBegin(GL_QUADS);              /// Each set of 4 vertices form a quad
+	glColor3f(0.0f, 0.6f, 0.8f); /// blue
+
+	glVertex2f(-1.0f, -0.1f);    /// x, y
+	glVertex2f(1.0f, -0.1f);    /// x, y
+
+	glVertex2f(1.0f, 0.4f);    /// x, y
+	glVertex2f(-1.0f, 0.4f);    /// x, y
+	glEnd();
+
+
+	///bank  river
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glColor3f(0,0,0);
+	glVertex2f(-1.0,0.4);
+	glVertex2f(1.0, 0.4);
+	glEnd();
+
+    boat();
+    if(covidPhase!=2)
+    {
+        ship();
+    }
+    Tree();
+
+
+}
+///display function
+void display()
+{
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //// Set background color to black and opaque
+	glClear(GL_COLOR_BUFFER_BIT);         //// Clear the color buffer (background)
+	glPushMatrix();
+	glTranslatef(planePosition,0,0);
+        plane();///plane
+	glPopMatrix();
+        river();
+	glFlush();  //// Render now
+}
+void handleMouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON)
+    {
+
+        ship_speed+=0.001;
+        planeSpeed+=0.001;
+        boat_speed+=0.001;
+
+    if (button == GLUT_RIGHT_BUTTON)
+    {
+
+        }
+        ship_speed-=0.001;
+        if(ship_speed<=0)
+        {
+            ship_speed=0.001;
+        }
+        planeSpeed-=0.001;
+        if(planeSpeed<=0)
+        {
+            planeSpeed=0.001;
+        }
+        boat_speed-=0.001;
+        if(boat_speed<=0)
+        {
+            boat_speed=0.001;
+        }
+
+    }
+    glutPostRedisplay();
+}
+
+
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+
+        case 'c':
+            if(covidPhase==1)
+            {
+                covidPhase=2;
+            }
+            else if(covidPhase==2)
+            {
+                covidPhase=3;
+            }
+            else
+            {
+                covidPhase=1;
+            }
+            break;
+        glutPostRedisplay();
+    }
+}
+
+
+
+
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);                 //// Initialize GLUT
+	glutCreateWindow("OpenGL Setup"); //// Create a window with the given title
+	glutInitWindowSize(320, 320);   //// Set the window's initial width & height
+	glutDisplayFunc(display); //// Register display callback handler for window re-paint
+	glutTimerFunc(100, update, 0);
+   glutKeyboardFunc(handleKeypress);
+   glutMouseFunc(handleMouse);
+	glutMainLoop();           //// Enter the event-processing loop
+	return 0;
+}
