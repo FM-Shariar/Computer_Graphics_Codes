@@ -7,3 +7,4 @@ enjoy the sun and moon rise and set and see stars twinkle at night. The scene in
 moving vehicles, vibrant trees, a working windmill, a port with cranes lifting containers, roadside 
 lampposts etc. You can interact with day-to-night transitions, rain or snowfall, and keyboard and 
 mouse-controlled features. Finally, the animation of basic human figures added a touch of realism. 
+Project video: 
