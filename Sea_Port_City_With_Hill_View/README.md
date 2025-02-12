@@ -6,5 +6,5 @@ pictures a lively seaport surrounded by scenic hills. Here you can watch cargo s
 enjoy the sun and moon rise and set and see stars twinkle at night. The scene includes a busy road, 
 moving vehicles, vibrant trees, a working windmill, a port with cranes lifting containers, roadside 
 lampposts etc. You can interact with day-to-night transitions, rain or snowfall, and keyboard and 
-mouse-controlled features. Finally, the animation of basic human figures added a touch of realism. 
+mouse-controlled features. Finally, the animation of basic human figures added a touch of realism. <br>
 Project video: 
